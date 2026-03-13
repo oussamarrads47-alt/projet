@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRANS-GEST — {% block title %}{% endblock %}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind (utility fallback) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Unfold Design System -->
+    <link rel="stylesheet" href="{% static 'css/unfold.css' %}?v=1.2">
+
+    <!-- Dark Mode CSS -->
+    <style>
+        html.dark body { background-color: #0f172a; color: #e2e8f0; }
+        html.dark #sidebar { background: #1e293b; border-color: rgba(255,255,255,0.06); }
+        html.dark .sidebar-link { color: rgba(255,255,255,0.55); }
+        html.dark .sidebar-link:hover { background: rgba(255,255,255,0.07); color: #fff; }
+        html.dark .sidebar-link.active { background: #2563eb; color: #fff; border-right-color: #60a5fa; }
+        html.dark .sidebar-link i { color: rgba(255,255,255,0.4); }
+        html.dark .sidebar-label { color: rgba(255,255,255,0.25); }
+        html.dark .sidebar-brand-text .name { color: #60a5fa; }
+        html.dark .sidebar-brand-text .sub { color: rgba(255,255,255,0.3); }
+        html.dark .sidebar-brand { border-color: rgba(255,255,255,0.07); }
+        html.dark .sidebar-footer { border-color: rgba(255,255,255,0.07); }
+        html.dark .sidebar-user { background: rgba(255,255,255,0.05); }
+        html.dark .sidebar-user-name { color: #f1f5f9; }
+        html.dark .sidebar-user-role { color: rgba(255,255,255,0.4); }
+        html.dark .topbar { background: rgba(15,23,42,0.95); border-color: rgba(255,255,255,0.06); }
+        html.dark .topbar-search input { background: #1e293b; border-color: rgba(255,255,255,0.1); color: #e2e8f0; }
+        html.dark .topbar-username { color: #e2e8f0; }
+        html.dark .glass-card,
+        html.dark .card { background: #1e293b; border-color: rgba(255,255,255,0.07); }
+        html.dark .bg-white { background-color: #1e293b !important; }
+        html.dark .text-gray-900 { color: #f1f5f9 !important; }
+        html.dark .text-gray-700 { color: #cbd5e1 !important; }
+        html.dark .text-gray-600 { color: #94a3b8 !important; }
+        html.dark .text-gray-500 { color: #64748b !important; }
+        html.dark .border-gray-100, html.dark .border-gray-200 { border-color: rgba(255,255,255,0.06) !important; }
+        html.dark .bg-gray-50, html.dark .bg-slate-50, html.dark .bg-gray-100 { background-color: rgba(255,255,255,0.04) !important; }
+        html.dark footer { border-color: rgba(255,255,255,0.06); }
+        html.dark footer p { color: rgba(255,255,255,0.3); }
+    </style>
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+    <!-- Mobile overlay -->
+    <div id="sidebar-overlay"></div>
+
+    <!-- Sidebar -->
+    {% include "includes/navbar.html" %}
+
+    <!-- Main wrapper -->
+    <div class="main-wrapper">
+
+        <!-- Top Navbar -->
+        <header class="topbar">
+            <!-- Left: burger + search -->
+            <div class="flex items-center gap-3">
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100 transition-colors">
+                    <i class="fas fa-bars text-base"></i>
+                </button>
+                <!-- Search -->
+                <form action="{% url 'search' %}" method="GET" class="hidden sm:block topbar-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Rechercher...">
+                </form>
+            </div>
+
+            <!-- Center: Brand -->
+            <div class="topbar-brand">
+                <img src="{% static 'images/transgest_logo.png' %}" alt="TRANS-GEST">
+                <div>
+                    <div class="topbar-brand-name">TRANS-GEST</div>
+                    <div class="topbar-brand-sub">Gestion des Matériels</div>
+                </div>
+            </div>
+
+            <!-- Right: Reception + Dark mode + User -->
+            <div class="flex items-center gap-3">
+                <!-- Réception button -->
+                <a href="{% url 'mouvement_list' %}"
+                   class="hidden sm:inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white text-xs font-bold rounded-full shadow-md shadow-blue-500/25 hover:shadow-lg hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all duration-200">
+                    <i class="fas fa-inbox text-xs"></i> Réception
+                </a>
+
+                <!-- Dark / Light mode toggle -->
+                <button id="darkToggle" onclick="toggleDark()"
+                    class="w-9 h-9 flex items-center justify-center rounded-full border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-600 transition-all duration-200"
+                    title="Basculer mode sombre/clair">
+                    <i id="darkIcon" class="fas fa-moon text-sm"></i>
+                </button>
+
+                {% comment %} User section removed from topbar as requested {% endcomment %}
+            </div>
+        </header>
+
+        <!-- Flash Messages -->
+        {% if messages %}
+        <div class="px-6 pt-5">
+            {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}" data-auto-dismiss>
+                <i class="fas {% if message.tags == 'error' %}fa-circle-xmark{% elif message.tags == 'success' %}fa-circle-check{% else %}fa-circle-info{% endif %}"></i>
+                <span>{{ message }}</span>
+                <button onclick="this.parentElement.remove()" class="ml-auto opacity-60 hover:opacity-100 text-lg leading-none">&times;</button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Page Content -->
+        <main class="flex-1 px-6 py-8">
+            {% block content %}{% endblock %}
+        </main>
+
+        <!-- Footer -->
+        <footer class="px-6 py-4 border-t border-slate-100">
+            <p class="text-xs text-slate-400 font-medium">
+                © 2024 TRANS-GEST. Tous droits réservés.
+            </p>
+        </footer>
+
+    </div><!-- /main-wrapper -->
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <!-- Unfold JS -->
+    <script src="{% static 'js/unfold.js' %}"></script>
+
+    <!-- Dark Mode JS -->
+    <script>
+        // Apply saved dark mode preference on load
+        (function() {
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.classList.add('dark');
+                var icon = document.getElementById('darkIcon');
+                if (icon) { icon.className = 'fas fa-sun text-sm text-yellow-400'; }
+            }
+        })();
+
+        function toggleDark() {
+            var html = document.documentElement;
+            var icon = document.getElementById('darkIcon');
+            var btn  = document.getElementById('darkToggle');
+            var isDark = html.classList.toggle('dark');
+            localStorage.setItem('darkMode', isDark);
+            if (isDark) {
+                icon.className = 'fas fa-sun text-sm text-yellow-400';
+                btn.classList.add('bg-slate-800', 'border-slate-600');
+                btn.classList.remove('bg-gray-50', 'border-gray-200');
+            } else {
+                icon.className = 'fas fa-moon text-sm';
+                btn.classList.remove('bg-slate-800', 'border-slate-600');
+                btn.classList.add('bg-gray-50', 'border-gray-200');
+            }
+        }
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

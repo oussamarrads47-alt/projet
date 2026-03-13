@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+{% block title %}Documents{% endblock %}
+
+{% block extra_css %}
+<style>
+    @media print {
+        #sidebar, header, .print\:hidden, footer, .no-print { display: none !important; }
+        .lg\:ml-\[260px\] { margin-left: 0 !important; }
+        body { background: white !important; }
+        main { padding: 0 !important; }
+        .shadow-sm, .shadow-lg { box-shadow: none !important; }
+        .rounded-2xl { border-radius: 0 !important; }
+        table { font-size: 11px !important; }
+        th, td { padding: 6px 10px !important; }
+        .print-header { display: flex !important; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #166534; }
+        .print-footer { display: block !important; text-align: center; margin-top: 20px; padding-top: 10px; border-top: 1px solid #d1d5db; font-size: 9px; color: #9ca3af; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Print Header (hidden on screen) -->
+<div class="print-header hidden">
+    <div>
+        <h1 style="font-size:18px;font-weight:700;color:#111827;">TRANS-GEST -- Registre des Documents</h1>
+    </div>
+</div>
+
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 animate-fade-in no-print">
+    <div>
+        <h1 class="text-2xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
+            <i class="fas fa-folder-open text-brand-600"></i>
+            Archives Documentaires
+        </h1>
+        <p class="text-sm text-gray-500 mt-1">Gestion des documents officiels</p>
+    </div>
+    <div class="flex items-center gap-2 flex-wrap">
+        <a href="{% url 'document_create' %}"
+            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-500 text-white text-sm font-bold rounded-full shadow-md shadow-red-500/25 hover:shadow-lg hover:shadow-red-500/40 hover:-translate-y-0.5 transition-all duration-200">
+            <i class="fas fa-plus text-xs"></i> Nouveau Document
+        </a>
+        <button onclick="window.print()"
+            class="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-50 text-blue-700 text-sm font-medium rounded-xl hover:bg-blue-100 transition-colors"
+            title="Imprimer la liste complete">
+            <i class="fas fa-print text-xs"></i> Imprimer tout
+        </button>
+    </div>
+</div>
+
+<!-- Filter -->
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 mb-4 no-print">
+    <form method="GET" class="flex items-center gap-2 flex-wrap">
+        <select name="type"
+            class="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all">
+            <option value="">-- Tous les types --</option>
+            {% for val, label in type_choices %}
+            <option value="{{ val }}" {% if current_type == val %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit"
+            class="px-4 py-1.5 bg-brand-800 text-white text-sm font-medium rounded-xl hover:bg-brand-700 transition-colors"><i class="fas fa-filter mr-1.5"></i>Filtrer</button>
+        <a href="{% url 'document_list' %}"
+            class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-colors"><i class="fas fa-times"></i></a>
+    </form>
+</div>
+
+<!-- Table -->
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm" id="docTable">
+            <thead>
+                <tr class="border-b border-gray-100">
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Type</th>
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Description</th>
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Entree</th>
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Sortie</th>
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Retour</th>
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Mouvements</th>
+                    <th class="text-right px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider no-print">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+                {% for doc in documents %}
+                <tr class="hover:bg-gray-50/50 transition-colors"
+                    data-type="{{ doc.get_type_display }}"
+                    data-date="{{ doc.date|date:'d/m/Y' }}"
+                    data-desc="{{ doc.description }}"
+                    data-sortie="{{ doc.date_sortie|date:'d/m/Y'|default:'-' }}"
+                    data-retour="{{ doc.date_retour|date:'d/m/Y'|default:'-' }}"
+                    data-mvts="{{ doc.nb_mouvements }}"
+                    data-obs="{{ doc.observations|default:'' }}">
+                    <td class="px-6 py-4"><span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-purple-50 text-purple-700">{{ doc.get_type_display }}</span></td>
+                    <td class="px-6 py-4 text-gray-600">{{ doc.date|date:"d/m/Y" }}</td>
+                    <td class="px-6 py-4 text-gray-900 max-w-[200px] truncate">{{ doc.description|truncatewords:10 }}</td>
+                    <td class="px-6 py-4 text-gray-500">{{ doc.date_entree|date:"d/m/Y"|default:"-" }}</td>
+                    <td class="px-6 py-4 text-gray-500">{{ doc.date_sortie|date:"d/m/Y"|default:"-" }}</td>
+                    <td class="px-6 py-4 text-gray-500">{{ doc.date_retour|date:"d/m/Y"|default:"-" }}</td>
+                    <td class="px-6 py-4"><span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700">{{ doc.nb_mouvements }}</span></td>
+                    <td class="px-6 py-4 no-print">
+                        <div class="flex items-center justify-end gap-1.5">
+                            <button onclick="printDoc(this)"
+                                class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                title="Imprimer ce document"><i class="fas fa-print text-xs"></i></button>
+                            <a href="{% url 'document_update' doc.pk %}" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i class="fas fa-pen-to-square text-xs"></i></a>
+                            <a href="{% url 'document_delete' doc.pk %}" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i class="fas fa-trash-can text-xs"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="px-6 py-12 text-center text-gray-400">Aucun document enregistre</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Pagination -->
+{% if documents.has_other_pages %}
+<div class="flex items-center justify-center gap-1.5 mt-6 no-print">
+    {% if documents.has_previous %}
+    <a href="?page={{ documents.previous_page_number }}&type={{ current_type }}"
+        class="px-3.5 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"><i class="fas fa-chevron-left text-xs"></i></a>
+    {% endif %}
+    {% for num in documents.paginator.page_range %}
+    <a href="?page={{ num }}&type={{ current_type }}"
+        class="w-10 h-10 flex items-center justify-center text-sm font-medium rounded-xl transition-colors {% if documents.number == num %}bg-brand-800 text-white{% else %}text-gray-600 bg-white border border-gray-200 hover:bg-gray-50{% endif %}">{{ num }}</a>
+    {% endfor %}
+    {% if documents.has_next %}
+    <a href="?page={{ documents.next_page_number }}&type={{ current_type }}"
+        class="px-3.5 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"><i class="fas fa-chevron-right text-xs"></i></a>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- Print Footer (hidden on screen) -->
+<div class="print-footer hidden">
+    <p>Document genere par TRANS-GEST -- Confidentiel</p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function printDoc(btn) {
+        var row = btn.closest('tr');
+        var d = {
+            type: row.getAttribute('data-type'),
+            date: row.getAttribute('data-date'),
+            desc: row.getAttribute('data-desc'),
+            sortie: row.getAttribute('data-sortie'),
+            retour: row.getAttribute('data-retour'),
+            mvts: row.getAttribute('data-mvts'),
+            obs: row.getAttribute('data-obs')
+        };
+
+        var emptyRows = '';
+        for (var i = 0; i < 11; i++) {
+            emptyRows += '<tr style="height:32px;">' +
+                '<td style="border:1px solid #000;padding:2px 4px;"></td>' +
+                '<td style="border:1px solid #000;padding:2px 4px;"></td>' +
+                '<td style="border:1px solid #000;padding:2px 4px;"></td>' +
+                '<td style="border:1px solid #000;padding:2px 4px;"></td>' +
+                '<td style="border:1px solid #000;padding:2px 4px;"></td>' +
+                '<td style="border:1px solid #000;padding:2px 4px;"></td>' +
+                '<td style="border:1px solid #000;padding:2px 4px;"></td>' +
+                '</tr>';
+        }
+
+        var html = '<!DOCTYPE html><html lang="fr"><head>' +
+            '<meta charset="UTF-8">' +
+            '<title>Bulletin de D\u00e9p\u00f4t en R\u00e9paration</title>' +
+            '<style>' +
+            '@page { size: A4 portrait; margin: 18mm 15mm 18mm 15mm; }' +
+            'body { font-family: "Times New Roman", Times, serif; font-size: 11pt; color: #000; background: #fff; margin: 0; padding: 0; }' +
+            'h1 { font-size: 14pt; font-weight: bold; text-transform: uppercase; text-align: center; margin: 0; letter-spacing: 1px; }' +
+            'h2 { font-size: 12pt; font-weight: bold; text-transform: uppercase; text-align: center; margin: 6px 0 0 0; letter-spacing: 0.5px; }' +
+            '.model-ref { position: absolute; top: 0; right: 0; font-size: 8.5pt; font-style: italic; }' +
+            '.header-section { position: relative; text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 14px; }' +
+            '.fields-row { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 14px; font-size: 10.5pt; }' +
+            '.field-line { flex: 1; white-space: nowrap; }' +
+            '.underline { display: inline-block; border-bottom: 1px solid #000; min-width: 160px; }' +
+            'table { width: 100%; border-collapse: collapse; margin-top: 4px; }' +
+            'thead tr th { border: 1px solid #000; padding: 5px 4px; font-size: 9.5pt; font-weight: bold; text-align: center; text-transform: uppercase; background: #fff; }' +
+            'tbody tr td { border: 1px solid #000; padding: 2px 4px; font-size: 9pt; }' +
+            '.footer-right { text-align: right; margin-top: 24px; font-size: 10.5pt; }' +
+            '.footer-left  { text-align: left;  margin-top: 6px;  font-size: 8.5pt; font-style: italic; }' +
+            '</style></head><body>' +
+            '<div class="header-section">' +
+            '<span class="model-ref">Mod\u00e8le 50/4</span>' +
+            '<h1>Inspection des Transmissions</h1>' +
+            '<h2>Bulletin de D\u00e9p\u00f4t en R\u00e9paration</h2>' +
+            '</div>' +
+            '<div class="fields-row">' +
+            '<div class="field-line">Ordre de Travail N\u00b0 : <span class="underline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>' +
+            '<div class="field-line" style="text-align:right;">Corps Service ou Etablissement : <span class="underline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>' +
+            '</div>' +
+            '<table>' +
+            '<thead>' +
+            '<tr>' +
+            '<th rowspan="2" style="width:11%;">Code<br>Article</th>' +
+            '<th rowspan="2" style="width:12%;">N\u00b0 S\u00e9rie</th>' +
+            '<th rowspan="2" style="width:28%;">D\u00e9signation</th>' +
+            '<th rowspan="2" style="width:8%;">Quantit\u00e9</th>' +
+            '<th colspan="3" style="width:41%;">RETRAIT</th>' +
+            '</tr>' +
+            '<tr>' +
+            '<th style="width:13%;">Date</th>' +
+            '<th style="width:16%;">Nom, Pr\u00e9nom</th>' +
+            '<th style="width:12%;">Signature</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>' + emptyRows + '</tbody>' +
+            '</table>' +
+            '<div class="footer-right">' +
+            'A __________________ le ____ / ____ / 20____<br><br>' +
+            'Le (1) __________________________' +
+            '</div>' +
+            '<div class="footer-left">(1) Repr\u00e9sentant de l\u2019unit\u00e9.</div>' +
+            '</body></html>';
+
+        var w = window.open('', '_blank', 'width=850,height=1100');
+        w.document.write(html);
+        w.document.close();
+        setTimeout(function () { w.print(); }, 500);
+    }
+</script>
+{% endblock %}

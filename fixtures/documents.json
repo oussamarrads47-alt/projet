@@ -1,0 +1,142 @@
+[
+    {
+        "model": "core.document",
+        "pk": 1,
+        "fields": {
+            "type": "50/4",
+            "date": "2025-03-01",
+            "description": "Bon de perception de matériels radio pour la 1ère section",
+            "date_sortie": "2025-03-01",
+            "date_retour": null,
+            "observations": "Perception en bonne et due forme",
+            "created_at": "2025-03-01T08:00:00Z",
+            "updated_at": "2025-03-01T08:00:00Z"
+        }
+    },
+    {
+        "model": "core.document",
+        "pk": 2,
+        "fields": {
+            "type": "50/5",
+            "date": "2025-03-05",
+            "description": "Fiche d'inventaire trimestriel Q1 2025",
+            "date_sortie": null,
+            "date_retour": null,
+            "observations": "Inventaire conforme",
+            "created_at": "2025-03-05T09:00:00Z",
+            "updated_at": "2025-03-05T09:00:00Z"
+        }
+    },
+    {
+        "model": "core.document",
+        "pk": 3,
+        "fields": {
+            "type": "50/6",
+            "date": "2025-03-10",
+            "description": "Bon de sortie de matériels téléphoniques",
+            "date_sortie": "2025-03-10",
+            "date_retour": "2025-04-10",
+            "observations": "Sortie temporaire pour exercice",
+            "created_at": "2025-03-10T10:00:00Z",
+            "updated_at": "2025-03-10T10:00:00Z"
+        }
+    },
+    {
+        "model": "core.document",
+        "pk": 4,
+        "fields": {
+            "type": "50/7",
+            "date": "2025-03-15",
+            "description": "Procès-verbal de réforme matériel radio",
+            "date_sortie": null,
+            "date_retour": null,
+            "observations": "Matériel irréparable",
+            "created_at": "2025-03-15T08:00:00Z",
+            "updated_at": "2025-03-15T08:00:00Z"
+        }
+    },
+    {
+        "model": "core.document",
+        "pk": 5,
+        "fields": {
+            "type": "50/4",
+            "date": "2025-03-20",
+            "description": "Bon de perception optiques pour unité de reconnaissance",
+            "date_sortie": "2025-03-20",
+            "date_retour": null,
+            "observations": "",
+            "created_at": "2025-03-20T09:00:00Z",
+            "updated_at": "2025-03-20T09:00:00Z"
+        }
+    },
+    {
+        "model": "core.document",
+        "pk": 6,
+        "fields": {
+            "type": "50/8",
+            "date": "2025-04-01",
+            "description": "Bordereau de versement de matériels informatiques",
+            "date_sortie": null,
+            "date_retour": null,
+            "observations": "Versement au dépôt central",
+            "created_at": "2025-04-01T10:00:00Z",
+            "updated_at": "2025-04-01T10:00:00Z"
+        }
+    },
+    {
+        "model": "core.document",
+        "pk": 7,
+        "fields": {
+            "type": "50/5",
+            "date": "2025-04-10",
+            "description": "Fiche technique de maintenance préventive",
+            "date_sortie": null,
+            "date_retour": null,
+            "observations": "Maintenance programmée",
+            "created_at": "2025-04-10T08:00:00Z",
+            "updated_at": "2025-04-10T08:00:00Z"
+        }
+    },
+    {
+        "model": "core.document",
+        "pk": 8,
+        "fields": {
+            "type": "50/6",
+            "date": "2025-04-15",
+            "description": "Bon de sortie véhicule blindé de transmission",
+            "date_sortie": "2025-04-15",
+            "date_retour": "2025-05-15",
+            "observations": "Sortie pour manœuvres",
+            "created_at": "2025-04-15T09:00:00Z",
+            "updated_at": "2025-04-15T09:00:00Z"
+        }
+    },
+    {
+        "model": "core.document",
+        "pk": 9,
+        "fields": {
+            "type": "autre",
+            "date": "2025-05-01",
+            "description": "Rapport d'inspection technique annuelle",
+            "date_sortie": null,
+            "date_retour": null,
+            "observations": "Inspection satisfaisante",
+            "created_at": "2025-05-01T10:00:00Z",
+            "updated_at": "2025-05-01T10:00:00Z"
+        }
+    },
+    {
+        "model": "core.document",
+        "pk": 10,
+        "fields": {
+            "type": "50/4",
+            "date": "2025-05-10",
+            "description": "Bon de perception GPS et matériels de navigation",
+            "date_sortie": "2025-05-10",
+            "date_retour": null,
+            "observations": "",
+            "created_at": "2025-05-10T08:00:00Z",
+            "updated_at": "2025-05-10T08:00:00Z"
+        }
+    }
+]

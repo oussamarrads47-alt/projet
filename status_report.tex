@@ -1,0 +1,880 @@
+% ============================================================
+%  PRÉSENTATION BEAMER — POINT DE SITUATION PROJET
+%  Projet : TRANS-GEST — Système de Gestion des Matériels
+%  Auteur : [Votre Nom]
+%  Date   : Mars 2026
+%  Compilateur recommandé : pdflatex (ou xelatex)
+%  Thème  : Metropolis (installez le package `beamertheme-metropolis`)
+%           Sinon remplacez par \usetheme{Madrid} ou \usetheme{Berlin}
+% ============================================================
+
+\documentclass[
+  aspectratio=169,       % Format 16:9 (moderne)
+  xcolor=dvipsnames,     % Palette de couleurs étendue
+  t                      % Alignement des blocs en haut
+]{beamer}
+
+% ────────────────────────────────────────────────────────────
+%  THÈME ET COULEURS
+% ────────────────────────────────────────────────────────────
+\usetheme{Madrid}
+
+% Palette de couleurs personnalisée (vert militaire/professionnel)
+\definecolor{PrimaryDark}{RGB}{15, 55, 35}    % Vert foncé
+\definecolor{PrimaryMid}{RGB}{22, 101, 52}    % Vert moyen
+\definecolor{PrimaryLight}{RGB}{220, 252, 231}% Vert très clair
+\definecolor{AccentOrange}{RGB}{234, 88, 12}  % Orange accent
+\definecolor{AccentBlue}{RGB}{30, 64, 175}    % Bleu accent
+\definecolor{LightGray}{RGB}{248, 250, 252}   % Fond gris clair
+\definecolor{TextDark}{RGB}{15, 23, 42}       % Texte sombre
+
+% Application des couleurs au thème
+\setbeamercolor{palette primary}{bg=PrimaryDark, fg=white}
+\setbeamercolor{palette secondary}{bg=PrimaryMid, fg=white}
+\setbeamercolor{palette tertiary}{bg=PrimaryDark, fg=white}
+\setbeamercolor{palette quaternary}{bg=PrimaryDark, fg=white}
+\setbeamercolor{structure}{fg=PrimaryMid}
+\setbeamercolor{section in toc}{fg=PrimaryDark}
+\setbeamercolor{frametitle}{bg=PrimaryDark, fg=white}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{author in head/foot}{bg=PrimaryMid, fg=white}
+\setbeamercolor{date in head/foot}{bg=PrimaryDark, fg=white}
+\setbeamercolor{page number in head/foot}{bg=PrimaryDark!80, fg=white}
+
+% Couleurs des blocs
+\setbeamercolor{block title}{bg=PrimaryMid, fg=white}
+\setbeamercolor{block body}{bg=PrimaryLight}
+\setbeamercolor{block title alerted}{bg=AccentOrange, fg=white}
+\setbeamercolor{block body alerted}{bg=orange!10}
+\setbeamercolor{block title example}{bg=AccentBlue, fg=white}
+\setbeamercolor{block body example}{bg=blue!8}
+
+% ────────────────────────────────────────────────────────────
+%  POLICE ET TYPOGRAPHIE
+% ────────────────────────────────────────────────────────────
+\usefonttheme{professionalfonts}
+\setbeamerfont{title}{size=\Large, series=\bfseries}
+\setbeamerfont{subtitle}{size=\normalsize, series=\normalfont}
+\setbeamerfont{frametitle}{size=\large, series=\bfseries}
+\setbeamerfont{block title}{size=\normalsize, series=\bfseries}
+
+% ────────────────────────────────────────────────────────────
+%  PACKAGES ESSENTIELS
+% ────────────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{graphicx}          % Insertion d'images
+\usepackage{booktabs}          % Tableaux professionnels
+\usepackage{pgfplots}          % Graphiques
+\pgfplotsset{compat=1.18}
+\usepackage{tikz}              % Dessins vectoriels
+\usetikzlibrary{shapes, arrows.meta, positioning, fit, backgrounds}
+\usepackage{fontawesome5}      % Icônes (installez le package)
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+% ────────────────────────────────────────────────────────────
+%  BARRE DE PROGRESSION PERSONNALISÉE
+% ────────────────────────────────────────────────────────────
+\makeatletter
+\addtobeamertemplate{footline}{}{%
+  \begin{beamercolorbox}[wd=\paperwidth, ht=1.5pt]{palette primary}%
+    \rule{\dimexpr\paperwidth*\insertframenumber/\inserttotalframenumber}{1.5pt}%
+  \end{beamercolorbox}%
+}
+\makeatother
+
+% ────────────────────────────────────────────────────────────
+%  STYLE DES ITEMS
+% ────────────────────────────────────────────────────────────
+\setbeamertemplate{itemize item}{\color{PrimaryMid}\rule[0.4ex]{5pt}{5pt}}
+\setbeamertemplate{itemize subitem}{\color{PrimaryMid}$\triangleright$}
+\setbeamertemplate{itemize subsubitem}{\color{PrimaryMid}$\diamond$}
+\setbeamertemplate{enumerate item}{\color{white}\fcolorbox{PrimaryMid}{PrimaryMid}{\tiny\bfseries\insertenumlabel}}
+\setbeamertemplate{navigation symbols}{}   % Supprimer les boutons de navigation
+\setbeamertemplate{caption}[numbered]
+
+% ────────────────────────────────────────────────────────────
+%  COMMANDES UTILITAIRES PERSONNALISÉES
+% ────────────────────────────────────────────────────────────
+
+% Boîte de statut : \statut{couleur}{icône}{texte}
+\newcommand{\statut}[3]{%
+  \begin{beamercolorbox}[rounded=true, wd=\textwidth, sep=4pt]{block body}%
+    {\color{#1}\textbullet} \textbf{#2} #3%
+  \end{beamercolorbox}%
+}
+
+% Espace image (placeholder pour diagrammes)
+\newcommand{\imagebox}[2][6cm]{%
+  \begin{center}%
+    \fbox{%
+      \begin{minipage}[c][3.5cm]{#1}%
+        \centering\color{gray}\small\itshape #2%
+      \end{minipage}%
+    }%
+  \end{center}%
+}
+
+% Description courte sous le titre de chaque slide (version compacte)
+\newcommand{\framedesc}[1]{%
+  {\small\itshape\textcolor{PrimaryDark!80}{#1}}\par%
+  \vspace{1pt}%
+  {\color{PrimaryMid}\rule{\textwidth}{0.4pt}}%
+  \vspace{4pt}%
+}
+
+% ────────────────────────────────────────────────────────────
+%  MÉTADONNÉES DU DOCUMENT
+% ────────────────────────────────────────────────────────────
+\title[TRANS-GEST — Point de Situation]{% Titre court pour footer
+  \textbf{TRANS-GEST}\\
+  Système de Gestion des Matériels de Transmission
+}
+\subtitle{Point de Situation — Sprint 3 / Mars 2026}
+\author[R. Laabidi, O. Jbari, H. Sebar]{%
+  Reda Laabidi \quad Oussama Jbari \quad Hatim Sebar
+}
+\institute[FAR]{%
+  Direction des Transmissions
+}
+\date{\today}
+
+% Définition de l'encadrant et icônes alternatives
+\newcommand{\encadrant}{S/C Outalb}
+\newcommand{\myicon}[1]{\textcolor{AccentOrange}{$\bullet$}} % Alternative simple aux icônes
+
+% Logo (décommentez et adaptez si vous avez un logo)
+% \logo{\includegraphics[height=0.8cm]{logo.png}}
+
+% ============================================================
+%  DÉBUT DU DOCUMENT
+% ============================================================
+\begin{document}
+
+% ────────────────────────────────────────────────────────────
+%  SLIDE 1 — PAGE DE TITRE
+% ────────────────────────────────────────────────────────────
+{
+  % Fond spécial pour la page de titre
+  \setbeamertemplate{footline}{}
+  \setbeamertemplate{headline}{}
+  \begin{frame}[plain, fragile]
+    \begin{tikzpicture}[remember picture, overlay]
+      % Fond gris très clair
+      \fill[LightGray] (current page.south west) rectangle (current page.north east);
+      
+      % Forme décorative supérieure (plus simple pour éviter les erreurs de paramètres)
+      \fill[PrimaryDark] (current page.north west) -- ([xshift=7cm]current page.north west) -- ([yshift=-6cm]current page.north east) -- (current page.north east) -- cycle;
+        
+      % Forme décorative inférieure
+      \fill[PrimaryMid] (current page.south east) -- ([yshift=3cm]current page.south east) -- ([xshift=-9cm]current page.south west) -- (current page.south west) -- cycle;
+
+      % Ligne d'accent orange
+      \draw[AccentOrange, line width=3pt] ([xshift=1cm, yshift=-2.5cm]current page.north west) -- ([xshift=7cm, yshift=-2.5cm]current page.north west);
+    \end{tikzpicture}
+
+    \vspace{0.6cm}
+    \begin{flushleft}
+      \begin{minipage}{0.75\textwidth}
+        {\color{white}\fontsize{30}{36}\selectfont\inserttitle\par}
+        \vspace{0.3cm}
+        {\large\color{white!95}\insertsubtitle\par}
+        \vspace{0.6cm}
+        \textcolor{AccentOrange}{\rule{5cm}{2.5pt}}
+      \end{minipage}
+    \end{flushleft}
+
+    \vfill
+
+    \begin{columns}[b]
+      \begin{column}{0.6\textwidth}
+        \begin{beamercolorbox}[sep=10pt, left, rounded=true]{block body}
+          {\small\textbf{Réalisé par :}\par}
+          \vspace{0.2cm}
+          \begin{tabular}{@{}ll}
+            \myicon{u} & Reda \textbf{Laabidi} \\
+            \myicon{u} & Oussama \textbf{Jbari} \\
+            \myicon{u} & Hatim \textbf{Sebar} \\
+          \end{tabular}
+        \end{beamercolorbox}
+      \end{column}
+      
+      \begin{column}{0.4\textwidth}
+        \begin{beamercolorbox}[sep=10pt, center, rounded=true]{block body alerted}
+          {\small\textbf{Encadrant :}\par}
+          \vspace{0.2cm}
+          \textbf{\encadrant}
+        \end{beamercolorbox}
+        \vspace{0.6cm}
+        \begin{flushright}
+          \small Sprint 3 --- Point de Situation \\
+          \today
+        \end{flushright}
+      \end{column}
+    \end{columns}
+  \end{frame}
+}
+
+% ────────────────────────────────────────────────────────────
+%  SLIDE 2 — TABLE DES MATIÈRES (optionnelle)
+% ────────────────────────────────────────────────────────────
+\begin{frame}{Plan de la présentation}
+  \framedesc{Vue d'ensemble des thèmes abordés dans cette présentation.}
+  \tableofcontents[hideallsubsections]
+\end{frame}
+
+% ============================================================
+%  SECTION 1 — CONTEXTE
+% ============================================================
+\section{Contexte du Projet}
+
+% ────────────────────────────────────────────────────────────
+%  SLIDE 3 — CONTEXTE
+% ────────────────────────────────────────────────────────────
+\begin{frame}{Contexte du Projet}
+  \framedesc{Présentation du problème existant et des enjeux qui justifient la réalisation de ce projet.}
+
+  \begin{columns}[T]
+
+    % Colonne gauche — Description du problème
+    \begin{column}{0.52\textwidth}
+      \begin{block}{Problématique identifiée}
+        La gestion des matériels de transmission dans les unités militaires
+        repose encore sur des \textbf{registres papier} et des fichiers
+        Excel non centralisés, entraînant :
+        \begin{itemize}
+          \item Perte de données et erreurs de saisie
+          \item Absence de traçabilité des mouvements
+          \item Impossible suivi en temps réel des stocks
+          \item Processus lents et redondants
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    % Colonne droite — Importance
+    \begin{column}{0.45\textwidth}
+      \begin{alertblock}{Enjeux}
+        \begin{itemize}
+          \item \textbf{Opérationnel} : disponibilité du matériel critique
+          \item \textbf{Sécurité} : traçabilité rigoureuse
+          \item \textbf{Efficacité} : réduction des délais administratifs
+          \item \textbf{Modernisation} : transformation numérique
+        \end{itemize}
+      \end{alertblock}
+
+      \vspace{0.3cm}
+
+      \begin{exampleblock}{Contexte}
+        Projet de stage initié en \textbf{Janvier 2026} dans le cadre
+        de la modernisation du système d'information de la
+        Direction des Transmissions.
+      \end{exampleblock}
+    \end{column}
+
+  \end{columns}
+\end{frame}
+
+% ============================================================
+%  SECTION 2 — OBJECTIFS
+% ============================================================
+\section{Objectifs du Projet}
+
+% ────────────────────────────────────────────────────────────
+%  SLIDE 4 — OBJECTIFS
+% ────────────────────────────────────────────────────────────
+\begin{frame}{Objectifs du Projet}
+  \framedesc{Définition des cibles à atteindre à l'issue du développement, du général au spécifique.}
+
+  \begin{block}{Objectif Général}
+    Développer une \textbf{application web} centralisée permettant la
+    gestion complète des matériels de transmission : inventaire,
+    mouvements, traçabilité et reporting.
+  \end{block}
+
+  \vspace{0.4cm}
+
+  \textbf{Objectifs Spécifiques :}
+
+  \vspace{0.2cm}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{enumerate}
+        \item Concevoir un modèle de données adapté aux besoins militaires
+        \item Développer un module de gestion des matériels (CRUD)
+        \item Implémenter un système de traçabilité des mouvements
+        \item Créer un tableau de bord analytique en temps réel
+      \end{enumerate}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{enumerate}
+        \setcounter{enumi}{4}
+        \item Gérer les utilisateurs avec contrôle d'accès par rôles
+        \item Générer des rapports et statistiques exportables
+        \item Assurer l'authentification sécurisée
+        \item Déployer sur un serveur accessible au sein du réseau
+      \end{enumerate}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+% ============================================================
+%  SECTION 3 — MÉTHODOLOGIE
+% ============================================================
+\section{Méthodologie}
+
+% ────────────────────────────────────────────────────────────
+%  SLIDE 5 — MÉTHODOLOGIE
+% ────────────────────────────────────────────────────────────
+\begin{frame}{Méthodologie de Développement}
+  \framedesc{Approche adoptée pour organiser et piloter le développement tout au long du projet.}
+
+  \begin{columns}[T]
+
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Approche Agile (Scrum adapté)}
+        \begin{itemize}
+          \item Sprints de \textbf{2 semaines}
+          \item Réunions hebdomadaires avec l'encadrant
+          \item Livraisons incrémentales et testables
+          \item Adaptation continue aux retours terrain
+        \end{itemize}
+      \end{block}
+
+      \vspace{0.3cm}
+
+      \begin{block}{Organisation du Travail}
+        \begin{itemize}
+          \item Planification via \textbf{Trello/GitHub Projects}
+          \item Versionnement \textbf{Git} local
+          \item Documentation progressive
+          \item Tests unitaires et fonctionnels
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.48\textwidth}
+      % ── Diagramme des sprints (TikZ) ──────────────────────
+      \begin{center}
+      \begin{tikzpicture}[font=\scriptsize, node distance=0.55cm]
+        \tikzstyle{sprint} = [rectangle, rounded corners=2pt,
+          minimum width=4.2cm, minimum height=0.55cm,
+          draw=PrimaryMid, fill=PrimaryLight, text=TextDark,
+          align=left, inner xsep=6pt]
+        \tikzstyle{done}  = [sprint, fill=PrimaryMid, text=white]
+        \tikzstyle{inprog}= [sprint, fill=AccentOrange!20, draw=AccentOrange]
+        \tikzstyle{todo}  = [sprint, fill=gray!10, draw=gray!50]
+
+        \node[done]  (s1) {\textbf{Sprint 1} — Analyse \& Conception};
+        \node[done]  (s2) [below=of s1] {\textbf{Sprint 2} — Auth \& Matériels};
+        \node[inprog](s3) [below=of s2] {\textbf{Sprint 3} — Dashboard \& Mouvements};
+        \node[todo]  (s4) [below=of s3] {\textbf{Sprint 4} — Rapports \& API};
+        \node[todo]  (s5) [below=of s4] {\textbf{Sprint 5} — Tests \& Déploiement};
+
+        \draw[->, thick, PrimaryMid] (s1.south)--(s2.north);
+        \draw[->, thick, PrimaryMid] (s2.south)--(s3.north);
+        \draw[->, thick, AccentOrange] (s3.south)--(s4.north);
+        \draw[->, thick, gray] (s4.south)--(s5.north);
+
+        % légende
+        \node[below=0.3cm of s5, font=\tiny] {
+          \textcolor{PrimaryMid}{$\blacksquare$} Terminé \quad
+          \textcolor{AccentOrange}{$\blacksquare$} En cours \quad
+          \textcolor{gray}{$\square$} À venir
+        };
+      \end{tikzpicture}
+      \end{center}
+    \end{column}
+
+  \end{columns}
+\end{frame}
+
+% ============================================================
+%  SECTION 4 — CONCEPTION
+% ============================================================
+\section{Niveau de Conception}
+
+% ────────────────────────────────────────────────────────────
+%  SLIDE 6 — ANALYSE DES BESOINS
+% ────────────────────────────────────────────────────────────
+\begin{frame}{Analyse des Besoins}
+  \framedesc{Identification et classification des exigences fonctionnelles, non fonctionnelles et des contraintes du système.}
+
+  \begin{columns}[T]
+
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Besoins Fonctionnels}
+        \begin{itemize}
+          \item Gestion des matériels (ajout, modification, suppression)
+          \item Enregistrement des mouvements (entrée/sortie)
+          \item Suivi des détenteurs et responsables
+          \item Tableau de bord avec statistiques
+          \item Gestion documentaire (ordres 50/4, 50/5…)
+          \item Authentification et gestion des rôles
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Besoins Non Fonctionnels}
+        \begin{itemize}
+          \item \textbf{Sécurité} : authentification, CSRF, RBAC
+          \item \textbf{Performance} : chargement $<$ 2 secondes
+          \item \textbf{Accessibilité} : interface responsive (PC, tablette)
+          \item \textbf{Fiabilité} : sauvegarde automatique des données
+          \item \textbf{Maintenabilité} : code documenté, modulaire
+        \end{itemize}
+      \end{block}
+
+      \vspace{0.2cm}
+
+      \begin{alertblock}{Contraintes}
+        Réseau interne fermé, pas d'accès Internet,\\
+        compatibilité navigateurs anciens requise.
+      \end{alertblock}
+
+    \end{column}
+
+  \end{columns}
+\end{frame}
+
+% ────────────────────────────────────────────────────────────
+%  SLIDE 7 — ARCHITECTURE SYSTÈME
+% ────────────────────────────────────────────────────────────
+\begin{frame}[fragile]{Architecture Générale du Système}
+  \framedesc{Vue structurelle du système selon le patron MVT de Django, avec les entités principales du modèle de données.}
+
+  \begin{columns}[T]
+
+    \begin{column}{0.52\textwidth}
+      % ── Diagramme architecture (TikZ) ─────────────────────
+      \begin{tikzpicture}[font=\tiny, node distance=0.5cm and 0.4cm,
+        box/.style={rectangle, rounded corners=3pt, draw=#1,
+          fill=#1!15, minimum width=2.8cm, minimum height=0.55cm,
+          align=center, text=TextDark}]
+
+        % Couches
+        \node[box=AccentBlue] (client) {Navigateur Web (Client)};
+        \node[box=PrimaryMid, below=0.3cm of client] (views) {Views (Django MVT)};
+        \node[box=PrimaryMid, below=0.2cm of views] (forms) {Forms / Serializers};
+        \node[box=PrimaryMid, below=0.2cm of forms] (models) {Models (ORM Django)};
+        \node[box=AccentOrange, below=0.2cm of models] (db) {SQLite / PostgreSQL};
+        \node[box=gray, right=0.4cm of views] (templates) {Templates HTML\\+ Tailwind CSS};
+        \node[box=gray, right=0.4cm of forms] (api) {REST API\\(DRF)};
+
+        % Flèches
+        \draw[->] (client) -- (views);
+        \draw[->] (views) -- (forms);
+        \draw[->] (forms) -- (models);
+        \draw[->] (models) -- (db);
+        \draw[<->] (views) -- (templates);
+        \draw[<->] (forms) -- (api);
+
+        % Labels couches
+        \node[left=0.1cm of client, font=\tiny\itshape, text=gray] {Présentation};
+        \node[left=0.1cm of views, font=\tiny\itshape, text=gray] {Logique};
+        \node[left=0.1cm of models, font=\tiny\itshape, text=gray] {Données};
+      \end{tikzpicture}
+    \end{column}
+
+    \begin{column}{0.44\textwidth}
+      \begin{block}{Modèle de données — Entités principales}
+        \begin{itemize}
+          \item \texttt{Materiel} — inventaire, type, état, image
+          \item \texttt{Magasin} — entrepôt, localisation
+          \item \texttt{Detenteur} — responsable, grade
+          \item \texttt{Mouvement} — entrée/sortie/reversement
+          \item \texttt{Document} — ordres 50/x liés
+          \item \texttt{User} — rôles : Admin, Manager, Viewer
+        \end{itemize}
+      \end{block}
+
+      \vspace{0.2cm}
+
+      % Emplacement pour un diagramme UML externe
+      % \includegraphics[width=\textwidth]{uml_diagram.png}
+      \imagebox[5cm]{Emplacement — Diagramme UML\\(à insérer : \texttt{uml.png})}
+    \end{column}
+
+  \end{columns}
+
+\end{frame}
+
+% ============================================================
+%  SECTION 5 — DÉVELOPPEMENT
+% ============================================================
+\section{Niveau de Développement}
+
+% ────────────────────────────────────────────────────────────
+%  SLIDE 8 — TECHNOLOGIES
+% ────────────────────────────────────────────────────────────
+\begin{frame}{Technologies et Outils Utilisés}
+  \framedesc{Ensemble des technologies, frameworks et outils mis en œuvre pour la réalisation du projet.}
+
+  \begin{columns}[T]
+
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Stack Technique}
+        \begin{tabular}{ll}
+          \toprule
+          \textbf{Couche} & \textbf{Technologie} \\
+          \midrule
+          Backend          & Python 3.12 + Django 5.x \\
+          API REST         & Django REST Framework \\
+          Frontend         & HTML5 + Tailwind CSS \\
+          JavaScript       & Vanilla JS + Chart.js \\
+          Base de données  & SQLite (dev) / PostgreSQL (prod) \\
+          Auth             & Django Auth + RBAC \\
+          \bottomrule
+        \end{tabular}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Outils de Développement}
+        \begin{itemize}
+          \item \textbf{IDE} : Visual Studio Code
+          \item \textbf{Versionning} : Git (local)
+          \item \textbf{Débogage} : Django Debug Toolbar
+          \item \textbf{Tests} : Django TestCase + Postman
+          \item \textbf{OS} : Windows 11 (Dev) + Linux (Prod)
+          \item \textbf{Serveur} : Gunicorn + Nginx (prévu)
+        \end{itemize}
+      \end{block}
+
+      \vspace{0.2cm}
+
+      \begin{exampleblock}{Packages Python clés}
+        \texttt{django}, \texttt{djangorestframework},
+        \texttt{Pillow}, \texttt{crispy-forms},
+        \texttt{python-decouple}
+      \end{exampleblock}
+    \end{column}
+
+  \end{columns}
+\end{frame}
+
+
+% ============================================================
+%  SECTION 6 — AVANCEMENT
+% ============================================================
+\section{Avancement du Projet}
+
+% ────────────────────────────────────────────────────────────
+%  SLIDE 10 — TABLEAU D'AVANCEMENT
+% ────────────────────────────────────────────────────────────
+\begin{frame}{État d'Avancement du Projet}
+  \framedesc{Récapitulatif du niveau de complétion de chaque module, avec indicateur d'avancement global à ce jour.}
+
+  \begin{center}
+  \begin{tabular}{p{4.5cm} c p{4.5cm}}
+    \toprule
+    \textbf{Fonctionnalité} & \textbf{Avancement} & \textbf{Statut} \\
+    \midrule
+    Authentification \& Login     & 100\% & \textcolor{PrimaryMid}{\textbf{Terminé}} \\
+    Page d'inscription            & 100\% & \textcolor{PrimaryMid}{\textbf{Terminé}} \\
+    Gestion des Matériels (CRUD)  & 100\% & \textcolor{PrimaryMid}{\textbf{Terminé}} \\
+    Gestion des Magasins          & 100\% & \textcolor{PrimaryMid}{\textbf{Terminé}} \\
+    Tableau de bord analytique    & 90\%  & \textcolor{AccentOrange}{\textbf{En cours}} \\
+    Mouvements (entrée/sortie)    & 80\%  & \textcolor{AccentOrange}{\textbf{En cours}} \\
+    Gestion documentaire          & 70\%  & \textcolor{AccentOrange}{\textbf{En cours}} \\
+    API REST                      & 50\%  & \textcolor{AccentOrange}{\textbf{En cours}} \\
+    Rapports PDF / Excel          & 10\%  & \textcolor{gray}{\textbf{À faire}} \\
+    Tests automatisés             & 20\%  & \textcolor{gray}{\textbf{À faire}} \\
+    Déploiement production        & 0\%   & \textcolor{gray}{\textbf{À faire}} \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+
+  \vspace{0.2cm}
+
+  % Barre de progression globale (TikZ)
+  \begin{center}
+  \begin{tikzpicture}
+    \draw[gray!30, line width=6pt, rounded corners=3pt] (0,0) -- (10,0);
+    \draw[PrimaryMid, line width=6pt, rounded corners=3pt] (0,0) -- (6.5,0);
+    \node[above] at (5,0.15) {\small\textbf{Avancement global : 65\%}};
+    \node[below] at (0,  -0.25) {\tiny 0\%};
+    \node[below] at (10, -0.25) {\tiny 100\%};
+    \node[above, text=PrimaryMid] at (6.5, 0.15) {\tiny $\blacktriangle$};
+  \end{tikzpicture}
+  \end{center}
+
+\end{frame}
+
+% ────────────────────────────────────────────────────────────
+%  SLIDE 11 — CE QUI EST FAIT / EN COURS / RESTE
+% ────────────────────────────────────────────────────────────
+\begin{frame}{Détail de l'Avancement}
+  \framedesc{Synthèse visuelle des tâches accomplies, en cours de réalisation et encore à planifier.}
+
+  \begin{columns}[T]
+
+    \begin{column}{0.32\textwidth}
+      \begin{block}{\textcolor{white}{Terminé}}
+        \begin{itemize}
+          \item[\textcolor{PrimaryMid}{\checkmark}] Authentification complète
+          \item[\textcolor{PrimaryMid}{\checkmark}] Page de connexion/inscription
+          \item[\textcolor{PrimaryMid}{\checkmark}] CRUD Matériels
+          \item[\textcolor{PrimaryMid}{\checkmark}] Gestion des magasins
+          \item[\textcolor{PrimaryMid}{\checkmark}] Upload d'images
+          \item[\textcolor{PrimaryMid}{\checkmark}] Interface responsive
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.32\textwidth}
+      \begin{alertblock}{\textcolor{white}{En cours}}
+        \begin{itemize}
+          \item[$\rightarrow$] Dashboard — graphiques Chart.js
+          \item[$\rightarrow$] Module mouvements
+          \item[$\rightarrow$] Gestion des documents
+          \item[$\rightarrow$] API REST (DRF)
+          \item[$\rightarrow$] Correction des bugs UI
+          \item[$\rightarrow$] Filtres et recherche avancée
+        \end{itemize}
+      \end{alertblock}
+    \end{column}
+
+    \begin{column}{0.32\textwidth}
+      \begin{exampleblock}{\textcolor{white}{Reste à faire}}
+        \begin{itemize}
+          \item[$\circ$] Export PDF / Excel
+          \item[$\circ$] Système de notifications
+          \item[$\circ$] Tests automatisés
+          \item[$\circ$] Optimisation des requêtes
+          \item[$\circ$] Déploiement sur serveur
+          \item[$\circ$] Documentation utilisateur
+        \end{itemize}
+      \end{exampleblock}
+    \end{column}
+
+  \end{columns}
+
+\end{frame}
+
+% ============================================================
+%  SECTION 7 — DIFFICULTÉS
+% ============================================================
+\section{Difficultés Rencontrées}
+
+% ────────────────────────────────────────────────────────────
+%  SLIDE 12 — DIFFICULTÉS
+% ────────────────────────────────────────────────────────────
+\begin{frame}{Difficultés Rencontrées}
+  \framedesc{Obstacles techniques et organisationnels rencontrés durant le développement, et solutions mises en place pour les surmonter.}
+
+  \begin{columns}[T]
+
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{Difficultés Techniques}
+        \begin{itemize}
+          \item Erreurs de syntaxe dans les templates Django\\
+                \textit{(\texttt{TemplateSyntaxError} — filtre \texttt{|default})}
+          \item Gestion des fichiers médias (MEDIA\_ROOT/URL)
+          \item Configuration des graphiques Chart.js avec données dynamiques
+          \item Compatibilité encodage UTF-8 sur Windows (CRLF vs LF)
+          \item Intégration Tailwind CSS sans build step
+        \end{itemize}
+      \end{alertblock}
+    \end{column}
+
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{Difficultés Organisationnelles}
+        \begin{itemize}
+          \item Évolution des besoins en cours de projet
+          \item Disponibilité limitée des utilisateurs finaux pour les tests
+          \item Accès restreint au réseau interne depuis l'environnement de dev
+        \end{itemize}
+      \end{alertblock}
+
+      \vspace{0.3cm}
+
+      \begin{block}{Solutions apportées}
+        \begin{itemize}
+          \item Revue systématique du code template
+          \item Configuration correcte des URL de média en développement
+          \item Isolation des tests dans un environnement virtuel Python
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+  \end{columns}
+
+\end{frame}
+
+% ============================================================
+%  SECTION 8 — TRAVAIL RESTANT
+% ============================================================
+\section{Travail Restant}
+
+% ────────────────────────────────────────────────────────────
+%  SLIDE 13 — PLANNING DES PROCHAINS SPRINTS
+% ────────────────────────────────────────────────────────────
+\begin{frame}{Planification du Travail Restant}
+  \framedesc{Diagramme de Gantt prévisionnel des tâches restantes jusqu'à la livraison finale du projet.}
+
+  \begin{center}
+  \begin{tikzpicture}[font=\scriptsize, x=1.0cm, y=0.65cm]
+
+    % Axe des tâches (vertical)
+    \foreach \y/\task in {
+      7/{Finalisation Dashboard},
+      6/{Module Mouvements complet},
+      5/{Gestion Documentaire},
+      4/{Export PDF / Excel},
+      3/{API REST complète},
+      2/{Tests \& Débogage},
+      1/{Déploiement Production}
+    }{
+      \node[anchor=east, font=\scriptsize] at (0, \y) {\task};
+    }
+
+    % Mois
+    \foreach \x/\mois in {1/Mars, 3/Avril, 5/Mai, 7/Juin}{
+      \node[anchor=south, font=\scriptsize\bfseries, text=PrimaryDark] at (\x, 7.8) {\mois};
+    }
+
+    % Barres de Gantt
+    % Terminé (vert foncé)
+    \fill[PrimaryMid!70]   (0.1,6.7) rectangle (1.9,7.3);  % Dashboard
+    % En cours (orange)
+    \fill[AccentOrange!60] (1.9,6.7) rectangle (3.0,7.3);
+    \fill[AccentOrange!60] (0.1,5.7) rectangle (2.5,6.3);  % Mouvements
+    \fill[AccentOrange!60] (0.1,4.7) rectangle (2.0,5.3);  % Documents
+    % À faire (bleu)
+    \fill[AccentBlue!50]   (2.0,4.7) rectangle (4.0,5.3);
+    \fill[AccentBlue!50]   (2.5,3.7) rectangle (5.0,4.3);  % Export
+    \fill[AccentBlue!50]   (2.0,2.7) rectangle (5.5,3.3);  % API
+    \fill[AccentBlue!50]   (4.0,1.7) rectangle (6.5,2.3);  % Tests
+    \fill[AccentBlue!50]   (5.5,0.7) rectangle (7.5,1.3);  % Deploy
+
+    % Ligne "Aujourd'hui"
+    \draw[red!70, dashed, thick] (2.0, 0.5) -- (2.0, 8.0);
+    \node[above, text=red!70, font=\tiny\bfseries] at (2.0, 8.0) {Aujourd'hui};
+
+    % Bordure
+    \draw[gray!30] (0.05, 0.4) rectangle (7.6, 7.6);
+
+    % Légende
+    \fill[PrimaryMid!70]   (0.1,-0.5) rectangle (0.7,-0.2);
+    \node[anchor=west, font=\tiny] at (0.75,-0.35) {Terminé};
+    \fill[AccentOrange!60] (2.0,-0.5) rectangle (2.6,-0.2);
+    \node[anchor=west, font=\tiny] at (2.65,-0.35) {En cours};
+    \fill[AccentBlue!50]   (4.0,-0.5) rectangle (4.6,-0.2);
+    \node[anchor=west, font=\tiny] at (4.65,-0.35) {À venir};
+
+  \end{tikzpicture}
+  \end{center}
+
+\end{frame}
+
+% ============================================================
+%  SECTION 9 — CONCLUSION
+% ============================================================
+\section{Conclusion et Prochaines Étapes}
+
+% ────────────────────────────────────────────────────────────
+%  SLIDE 14 — CONCLUSION
+% ────────────────────────────────────────────────────────────
+\begin{frame}{Conclusion et Prochaines Étapes}
+  \framedesc{Bilan global du projet à ce stade et feuille de route pour la finalisation et la mise en production.}
+
+  \begin{columns}[T]
+
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Bilan à ce stade}
+        Le projet \textbf{TRANS-GEST} a atteint un avancement de
+        \textbf{65\%} avec les modules fondamentaux opérationnels :
+        \begin{itemize}
+          \item Architecture Django robuste et scalable
+          \item Interface moderne et responsive
+          \item Base de données bien structurée
+          \item Authentification et gestion des rôles
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.48\textwidth}
+      \begin{exampleblock}{Prochaines Étapes (Sprint 4 \& 5)}
+        \begin{enumerate}
+          \item Finalisation du module de mouvements
+          \item Implémentation export PDF/Excel
+          \item Tests unitaires et d'intégration
+          \item Recette utilisateur avec les opérateurs
+          \item Déploiement sur serveur de production
+          \item Formation des utilisateurs finaux
+        \end{enumerate}
+      \end{exampleblock}
+    \end{column}
+
+  \end{columns}
+
+  \vspace{0.4cm}
+
+  \begin{alertblock}{Objectif}
+    Livraison de la version finale \textbf{opérationnelle} prévue pour
+    \textbf{Juin 2026}, avec formation des utilisateurs et documentation technique complète.
+  \end{alertblock}
+
+\end{frame}
+
+% ────────────────────────────────────────────────────────────
+%  SLIDE 15 — SLIDE DE CLÔTURE
+% ────────────────────────────────────────────────────────────
+{
+  \setbeamertemplate{footline}{}
+  \setbeamertemplate{headline}{}
+  \begin{frame}[plain]
+    \begin{tikzpicture}[remember picture, overlay]
+      \fill[PrimaryDark] (current page.south west) rectangle
+        ([yshift=3.5cm]current page.south east);
+      \fill[PrimaryMid] ([yshift=3.5cm]current page.south west) rectangle
+        ([yshift=3.8cm]current page.south east);
+      \fill[AccentOrange!80!red] ([yshift=3.8cm]current page.south west) rectangle
+        ([yshift=3.9cm]current page.south east);
+    \end{tikzpicture}
+
+    \vspace{0.5cm}
+    \begin{center}
+      {\Huge\bfseries\color{PrimaryDark} Merci pour votre attention}
+
+      \vspace{0.8cm}
+      \textcolor{AccentOrange}{\rule{5cm}{1.5pt}}
+      \vspace{0.8cm}
+
+      {\large\textit{Des questions ?}}
+
+      \vspace{1.5cm}
+
+      \begin{columns}
+        \begin{column}{0.45\textwidth}
+          \begin{center}
+            {\small\textbf{Votre Nom}\\
+            \textit{votre.email@example.com}\\
+            Direction des Transmissions — FAR}
+          \end{center}
+        \end{column}
+        \begin{column}{0.45\textwidth}
+          \begin{center}
+            {\small\textbf{Projet :} TRANS-GEST\\
+            \textbf{Version :} Sprint 3 / v0.7\\
+            \textbf{Date :} Mars 2026}
+          \end{center}
+        \end{column}
+      \end{columns}
+    \end{center}
+  \end{frame}
+}
+
+% ============================================================
+%  FIN DU DOCUMENT
+% ============================================================
+\end{document}

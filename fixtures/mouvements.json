@@ -1,0 +1,212 @@
+[
+    {
+        "model": "core.mouvement",
+        "pk": 1,
+        "fields": {
+            "type": "perception",
+            "date": "2025-03-01",
+            "materiel": 1,
+            "document": 1,
+            "quantite": 1,
+            "observations": "Perception radio Harris",
+            "created_at": "2025-03-01T08:30:00Z",
+            "updated_at": "2025-03-01T08:30:00Z"
+        }
+    },
+    {
+        "model": "core.mouvement",
+        "pk": 2,
+        "fields": {
+            "type": "perception",
+            "date": "2025-03-05",
+            "materiel": 2,
+            "document": 1,
+            "quantite": 1,
+            "observations": "Perception radio Motorola",
+            "created_at": "2025-03-05T09:00:00Z",
+            "updated_at": "2025-03-05T09:00:00Z"
+        }
+    },
+    {
+        "model": "core.mouvement",
+        "pk": 3,
+        "fields": {
+            "type": "sortie",
+            "date": "2025-03-10",
+            "materiel": 3,
+            "document": 3,
+            "quantite": 1,
+            "observations": "Sortie pour exercice terrain",
+            "created_at": "2025-03-10T10:00:00Z",
+            "updated_at": "2025-03-10T10:00:00Z"
+        }
+    },
+    {
+        "model": "core.mouvement",
+        "pk": 4,
+        "fields": {
+            "type": "perception",
+            "date": "2025-03-15",
+            "materiel": 4,
+            "document": 1,
+            "quantite": 1,
+            "observations": "Attribution PC durci au bureau",
+            "created_at": "2025-03-15T08:00:00Z",
+            "updated_at": "2025-03-15T08:00:00Z"
+        }
+    },
+    {
+        "model": "core.mouvement",
+        "pk": 5,
+        "fields": {
+            "type": "perception",
+            "date": "2025-03-20",
+            "materiel": 6,
+            "document": 5,
+            "quantite": 1,
+            "observations": "Perception jumelles thermiques",
+            "created_at": "2025-03-20T09:00:00Z",
+            "updated_at": "2025-03-20T09:00:00Z"
+        }
+    },
+    {
+        "model": "core.mouvement",
+        "pk": 6,
+        "fields": {
+            "type": "sortie",
+            "date": "2025-03-22",
+            "materiel": 7,
+            "document": 8,
+            "quantite": 1,
+            "observations": "Sortie véhicule pour manœuvres",
+            "created_at": "2025-03-22T10:00:00Z",
+            "updated_at": "2025-03-22T10:00:00Z"
+        }
+    },
+    {
+        "model": "core.mouvement",
+        "pk": 7,
+        "fields": {
+            "type": "entree",
+            "date": "2025-04-01",
+            "materiel": 8,
+            "document": 6,
+            "quantite": 2,
+            "observations": "Réception switchs réseau",
+            "created_at": "2025-04-01T08:00:00Z",
+            "updated_at": "2025-04-01T08:00:00Z"
+        }
+    },
+    {
+        "model": "core.mouvement",
+        "pk": 8,
+        "fields": {
+            "type": "reversement",
+            "date": "2025-04-05",
+            "materiel": 9,
+            "document": 4,
+            "quantite": 1,
+            "observations": "Reversement radio hors service",
+            "created_at": "2025-04-05T09:00:00Z",
+            "updated_at": "2025-04-05T09:00:00Z"
+        }
+    },
+    {
+        "model": "core.mouvement",
+        "pk": 9,
+        "fields": {
+            "type": "perception",
+            "date": "2025-04-10",
+            "materiel": 10,
+            "document": 5,
+            "quantite": 1,
+            "observations": "Perception PVS-14",
+            "created_at": "2025-04-10T10:00:00Z",
+            "updated_at": "2025-04-10T10:00:00Z"
+        }
+    },
+    {
+        "model": "core.mouvement",
+        "pk": 10,
+        "fields": {
+            "type": "entree",
+            "date": "2025-04-15",
+            "materiel": 12,
+            "document": 6,
+            "quantite": 1,
+            "observations": "Réception routeur Bittium",
+            "created_at": "2025-04-15T08:00:00Z",
+            "updated_at": "2025-04-15T08:00:00Z"
+        }
+    },
+    {
+        "model": "core.mouvement",
+        "pk": 11,
+        "fields": {
+            "type": "perception",
+            "date": "2025-04-20",
+            "materiel": 14,
+            "document": 10,
+            "quantite": 1,
+            "observations": "Perception radio HF Codan",
+            "created_at": "2025-04-20T09:00:00Z",
+            "updated_at": "2025-04-20T09:00:00Z"
+        }
+    },
+    {
+        "model": "core.mouvement",
+        "pk": 12,
+        "fields": {
+            "type": "sortie",
+            "date": "2025-05-01",
+            "materiel": 15,
+            "document": 9,
+            "quantite": 1,
+            "observations": "Sortie groupe électrogène",
+            "created_at": "2025-05-01T10:00:00Z",
+            "updated_at": "2025-05-01T10:00:00Z"
+        }
+    },
+    {
+        "model": "core.mouvement",
+        "pk": 13,
+        "fields": {
+            "type": "perception",
+            "date": "2025-05-05",
+            "materiel": 16,
+            "document": 10,
+            "quantite": 1,
+            "observations": "Perception drone DJI",
+            "created_at": "2025-05-05T08:00:00Z",
+            "updated_at": "2025-05-05T08:00:00Z"
+        }
+    },
+    {
+        "model": "core.mouvement",
+        "pk": 14,
+        "fields": {
+            "type": "perception",
+            "date": "2025-05-10",
+            "materiel": 18,
+            "document": 10,
+            "quantite": 2,
+            "observations": "Perception GPS Garmin",
+            "created_at": "2025-05-10T09:00:00Z",
+            "updated_at": "2025-05-10T09:00:00Z"
+        }
+    },
+    {
+        "model": "core.mouvement",
+        "pk": 15,
+        "fields": {
+            "type": "reversement",
+            "date": "2025-05-15",
+            "materiel": 19,
+            "document": 4,
+            "quantite": 1,
+            "observations": "Reversement radio défectueuse",
+            "created_at": "2025-05-15T10:00:00Z",
+            "updated_at": "2025-05-15T10:00:00Z"
+        }
+    }
+]

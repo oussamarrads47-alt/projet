@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e40af"/>
+      <stop offset="100%" style="stop-color:#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b"/>
+      <stop offset="100%" style="stop-color:#fbbf24"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Circle -->
+  <circle cx="256" cy="256" r="240" fill="url(#bg)" stroke="#1e3a8a" stroke-width="8"/>
+  <!-- Shield -->
+  <path d="M256 80 L380 140 L380 280 Q380 380 256 440 Q132 380 132 280 L132 140 Z" fill="none" stroke="url(#gold)" stroke-width="6"/>
+  <!-- Tower -->
+  <rect x="244" y="160" width="24" height="160" fill="#ffffff" rx="4"/>
+  <rect x="236" y="280" width="40" height="8" fill="#ffffff" rx="2"/>
+  <rect x="228" y="300" width="56" height="8" fill="#ffffff" rx="2"/>
+  <!-- Antenna waves -->
+  <path d="M210 180 Q230 160 256 145 Q282 160 302 180" fill="none" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+  <path d="M190 200 Q220 170 256 155 Q292 170 322 200" fill="none" stroke="#fbbf24" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+  <path d="M170 220 Q210 180 256 165 Q302 180 342 220" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+  <!-- Star -->
+  <polygon points="256,100 262,118 282,118 266,130 272,148 256,138 240,148 246,130 230,118 250,118" fill="#fbbf24"/>
+  <!-- Text TRANS-GEST -->
+  <text x="256" y="380" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-weight="bold" font-size="36" fill="#ffffff" letter-spacing="3">TRANS-GEST</text>
+  <text x="256" y="410" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#93c5fd" letter-spacing="2">MATÉRIELS TRANSMISSION</text>
+</svg>

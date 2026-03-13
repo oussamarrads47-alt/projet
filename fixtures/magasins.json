@@ -1,0 +1,32 @@
+[
+    {
+        "model": "core.magasin",
+        "pk": 1,
+        "fields": {
+            "nom": "Magasin Central de Transmission",
+            "localisation": "Quartier Général, Rabat",
+            "created_at": "2025-01-15T08:00:00Z",
+            "updated_at": "2025-01-15T08:00:00Z"
+        }
+    },
+    {
+        "model": "core.magasin",
+        "pk": 2,
+        "fields": {
+            "nom": "Dépôt Régional Sud",
+            "localisation": "Base Militaire, Agadir",
+            "created_at": "2025-02-01T09:00:00Z",
+            "updated_at": "2025-02-01T09:00:00Z"
+        }
+    },
+    {
+        "model": "core.magasin",
+        "pk": 3,
+        "fields": {
+            "nom": "Magasin Technique Nord",
+            "localisation": "Camp de Transmission, Kénitra",
+            "created_at": "2025-02-20T10:00:00Z",
+            "updated_at": "2025-02-20T10:00:00Z"
+        }
+    }
+]

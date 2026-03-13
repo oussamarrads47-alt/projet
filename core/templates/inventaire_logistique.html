@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% block title %}Inventaire Logistique{% endblock %}
+
+{% block extra_head %}
+<style>
+    @media print {
+        #sidebar, header, .no-print, footer { display: none !important; }
+        .main-wrapper { margin-left: 0 !important; }
+        body { background: white !important; font-size: 9pt; }
+        main { padding: 0 !important; }
+        .shadow-sm, .shadow-lg { box-shadow: none !important; }
+        .print-title { display: block !important; text-align: center; margin-bottom: 12px; }
+        table { font-size: 8pt !important; }
+        /* force all text dark for print */
+        * { color: #000 !important; background: white !important; }
+        thead tr { background: #d1d5db !important; }
+    }
+    .print-title { display: none; }
+
+    /* Logistic table styles */
+    .inv-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .inv-table th, .inv-table td {
+        border: 1px solid #cbd5e1;
+        padding: 6px 10px;
+        text-align: center;
+        white-space: nowrap;
+    }
+    .inv-table th { background: #1e293b; color: #fff; font-size: 11px; letter-spacing: .04em; }
+    .inv-table td.name { text-align: left; white-space: normal; max-width: 280px; }
+    .inv-table tr:nth-child(even) { background: #f8fafc; }
+    .inv-table tr:hover { background: #eff6ff; }
+    .inv-table .total-row { background: #fef9c3 !important; font-weight: 700; }
+    .inv-table .total-row td { border-top: 2px solid #1e293b; }
+
+    .section-header {
+        display: flex; align-items: center; gap: 10px;
+        background: linear-gradient(90deg, #1e3a5f 0%, #2563eb 100%);
+        color: #fff; padding: 10px 18px;
+        border-radius: 8px 8px 0 0;
+        font-weight: 700; font-size: 14px; letter-spacing: .05em;
+    }
+    .section-header i { color: #93c5fd; }
+    .section-wrap { margin-bottom: 32px; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.07); }
+
+    .col-group-head { font-size: 10px; background: #334155 !important; }
+    .col-qte  { background: #0f172a !important; }
+
+    /* column color accents */
+    .cell-svc { color: #15803d; font-weight: 600; }
+    .cell-mag { color: #1d4ed8; font-weight: 600; }
+    .cell-rep { color: #b45309; font-weight: 600; }
+    .cell-gmi { color: #7c3aed; }
+    .cell-gs  { color: #0891b2; }
+    .cell-gcs { color: #be123c; }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Print title (hidden on screen) -->
+<div class="print-title">
+    <h1 style="font-size:16px; font-weight:800;">INVENTAIRE LOGISTIQUE — MATÉRIELS DE TRANSMISSION</h1>
+    <p style="font-size:10px;">Date d'impression : {% now "d/m/Y" %}</p>
+</div>
+
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 no-print">
+    <div>
+        <h1 class="text-2xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
+            <i class="fas fa-table-list text-blue-600"></i>
+            Inventaire Logistique
+        </h1>
+        <p class="text-sm text-gray-500 mt-1">
+            Tableau logistique militaire — Position &amp; Répartition des matériels
+        </p>
+    </div>
+    <div class="flex items-center gap-2 no-print">
+        <button onclick="window.print()"
+            class="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-50 text-blue-700 text-sm font-medium rounded-xl hover:bg-blue-100 transition-colors">
+            <i class="fas fa-print text-xs"></i> Imprimer
+        </button>
+    </div>
+</div>
+
+<!-- Légende -->
+<div class="flex flex-wrap gap-4 mb-6 bg-white rounded-xl border border-gray-100 shadow-sm p-4 no-print">
+    <div class="flex items-center gap-2 text-xs font-semibold">
+        <span class="px-2 py-0.5 rounded bg-slate-800 text-white">QTE</span> Quantité totale
+    </div>
+    <div class="flex items-center gap-2 text-xs font-semibold text-green-700">
+        <span class="px-2 py-0.5 rounded bg-green-100">SVC</span> En service
+    </div>
+    <div class="flex items-center gap-2 text-xs font-semibold text-blue-700">
+        <span class="px-2 py-0.5 rounded bg-blue-100">MAG</span> Magasin
+    </div>
+    <div class="flex items-center gap-2 text-xs font-semibold text-amber-700">
+        <span class="px-2 py-0.5 rounded bg-amber-100">REP</span> Réparation
+    </div>
+    <div class="flex items-center gap-2 text-xs font-semibold text-violet-700">
+        <span class="px-2 py-0.5 rounded bg-violet-100">GMI</span> Groupement Mat. Ingénierie
+    </div>
+    <div class="flex items-center gap-2 text-xs font-semibold text-cyan-700">
+        <span class="px-2 py-0.5 rounded bg-cyan-100">GS</span> Groupe de Soutien
+    </div>
+    <div class="flex items-center gap-2 text-xs font-semibold text-rose-700">
+        <span class="px-2 py-0.5 rounded bg-rose-100">GCS</span> Groupe Combat et Soutien
+    </div>
+</div>
+
+{% if not data %}
+<div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center text-gray-400">
+    <i class="fas fa-database text-4xl mb-4 opacity-30"></i>
+    <p class="font-medium">Aucune donnée d'inventaire disponible.</p>
+    <p class="text-sm mt-1">Lancez la commande : <code class="bg-gray-100 px-2 py-0.5 rounded">python manage.py seed_inventaire</code></p>
+</div>
+{% endif %}
+
+{% for bloc in data %}
+<div class="section-wrap">
+    <!-- Section header -->
+    <div class="section-header">
+        <i class="fas fa-{% if 'radar' in bloc.categorie.code %}satellite-dish{% elif 'hf' in bloc.categorie.code %}tower-broadcast{% else %}radio{% endif %}"></i>
+        SECTION : {{ bloc.categorie }}
+    </div>
+
+    {% if bloc.lignes %}
+    <div class="overflow-x-auto">
+        <table class="inv-table">
+            <thead>
+                <tr class="col-group-head">
+                    <th rowspan="2" class="name" style="min-width:220px;">DÉSIGNATION DU MATÉRIEL</th>
+                    <th rowspan="2" class="col-qte">QTE</th>
+                    <th colspan="3">POSITION</th>
+                    <th colspan="3">RÉPARTITION MAT EN SVC</th>
+                </tr>
+                <tr>
+                    <th class="text-green-300">SVC</th>
+                    <th class="text-blue-300">MAG</th>
+                    <th class="text-amber-300">REP</th>
+                    <th class="text-violet-300">GMI</th>
+                    <th class="text-cyan-300">GS</th>
+                    <th class="text-rose-300">GCS</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ligne in bloc.lignes %}
+                <tr>
+                    <td class="name">{{ ligne.designation }}</td>
+                    <td><strong>{{ ligne.qte }}</strong></td>
+                    <td class="cell-svc">{{ ligne.svc }}</td>
+                    <td class="cell-mag">{{ ligne.mag }}</td>
+                    <td class="cell-rep">{{ ligne.rep }}</td>
+                    <td class="cell-gmi">{{ ligne.gmi }}</td>
+                    <td class="cell-gs">{{ ligne.gs }}</td>
+                    <td class="cell-gcs">{{ ligne.gcs }}</td>
+                </tr>
+                {% endfor %}
+                <!-- Totaux ligne -->
+                <tr class="total-row">
+                    <td class="name" style="font-size:11px; letter-spacing:.04em; text-transform:uppercase;">
+                        TOTAL {{ bloc.categorie }}
+                    </td>
+                    <td><strong>{{ bloc.totaux.qte }}</strong></td>
+                    <td><strong>{{ bloc.totaux.svc }}</strong></td>
+                    <td><strong>{{ bloc.totaux.mag }}</strong></td>
+                    <td><strong>{{ bloc.totaux.rep }}</strong></td>
+                    <td><strong>{{ bloc.totaux.gmi }}</strong></td>
+                    <td><strong>{{ bloc.totaux.gs }}</strong></td>
+                    <td><strong>{{ bloc.totaux.gcs }}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="px-6 py-4 text-gray-400 text-sm italic bg-white">
+        Aucune ligne pour cette catégorie.
+    </div>
+    {% endif %}
+</div>
+{% endfor %}
+
+{% endblock %}

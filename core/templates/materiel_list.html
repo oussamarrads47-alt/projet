@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block title %}Materiels{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 animate-fade-in">
+    <div>
+        <h1 class="text-2xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
+            <i class="fas fa-boxes-stacked text-brand-600"></i>
+            Parc des Matériels
+        </h1>
+        <p class="text-sm text-gray-500 mt-1">Gestion de votre inventaire</p>
+    </div>
+    <div class="flex items-center gap-2 flex-wrap">
+        <a href="{% url 'materiel_create' %}"
+            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-500 text-white text-sm font-bold rounded-full shadow-md shadow-red-500/25 hover:shadow-lg hover:shadow-red-500/40 hover:-translate-y-0.5 transition-all duration-200">
+            <i class="fas fa-plus text-xs"></i> Nouveau Matériel
+        </a>
+        <div class="flex items-center gap-1.5">
+            <a href="{% url 'export_materiels_excel' %}"
+                class="p-2.5 bg-green-50 text-green-700 rounded-xl hover:bg-green-100 transition-colors" title="Excel">
+                <i class="fas fa-file-excel text-sm"></i>
+            </a>
+            <a href="{% url 'export_materiels_csv' %}"
+                class="p-2.5 bg-blue-50 text-blue-700 rounded-xl hover:bg-blue-100 transition-colors" title="CSV">
+                <i class="fas fa-file-csv text-sm"></i>
+            </a>
+            <a href="{% url 'export_materiels_pdf' %}"
+                class="p-2.5 bg-red-50 text-red-700 rounded-xl hover:bg-red-100 transition-colors" title="PDF">
+                <i class="fas fa-file-pdf text-sm"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 mb-4">
+    <form method="GET" class="flex flex-wrap items-center gap-2">
+        <div class="w-full sm:w-64">
+            <input type="text" name="q" value="{{ current_q }}" placeholder="Rechercher..."
+                class="w-full px-4 py-1.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all">
+        </div>
+        <select name="etat"
+            class="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all">
+            <option value="">-- Etat --</option>
+            {% for val, label in etat_choices %}
+            <option value="{{ val }}" {% if current_etat == val %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+        <select name="type"
+            class="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all">
+            <option value="">-- Type --</option>
+            {% for val, label in type_choices %}
+            <option value="{{ val }}" {% if current_type == val %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+        <select name="magasin"
+            class="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all">
+            <option value="">-- Magasin --</option>
+            {% for mag in magasins %}
+            <option value="{{ mag.pk }}" {% if current_magasin == mag.pk|stringformat:"d" %}selected{% endif %}>{{ mag.nom }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit"
+            class="px-4 py-1.5 bg-brand-800 text-white text-sm font-medium rounded-xl hover:bg-brand-700 transition-colors">
+            <i class="fas fa-filter mr-1.5"></i>Filtrer
+        </button>
+        <a href="{% url 'materiel_list' %}"
+            class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-colors">
+            <i class="fas fa-times"></i>
+        </a>
+    </form>
+</div>
+
+<!-- Table -->
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="border-b border-gray-100">
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Photo</th>
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Designation</th>
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Type</th>
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">N Serie</th>
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Etat</th>
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Magasin</th>
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Detenteur</th>
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Entree</th>
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Sortie</th>
+                    <th class="text-right px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+                {% for m in materiels %}
+                <tr class="hover:bg-gray-50/50 transition-colors">
+                    <td class="px-6 py-3">
+                        {% if m.image %}
+                        <img src="{{ m.image.url }}" class="w-10 h-10 rounded-xl object-cover" alt="{{ m.designation }}">
+                        {% else %}
+                        <div class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center"><i class="fas fa-image text-gray-300 text-xs"></i></div>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-3 font-semibold text-gray-900">{{ m.designation }}</td>
+                    <td class="px-6 py-3"><span class="text-xs font-medium px-2.5 py-1 rounded-lg bg-brand-50 text-brand-700">{{ m.get_type_materiel_display }}</span></td>
+                    <td class="px-6 py-3"><code class="text-xs bg-gray-100 px-2 py-1 rounded-md text-gray-600 font-mono">{{ m.numero_serie }}</code></td>
+                    <td class="px-6 py-3">
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-lg
+                            {% if m.etat == 'service' %}bg-green-100 text-green-700
+                            {% elif m.etat == 'attente' %}bg-amber-100 text-amber-700
+                            {% elif m.etat == 'hors_service' %}bg-red-100 text-red-700
+                            {% else %}bg-blue-100 text-blue-700{% endif %}">
+                            {{ m.get_etat_display }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-3 text-gray-600">{{ m.magasin.nom }}</td>
+                    <td class="px-6 py-3 text-gray-600">{{ m.detenteur|default:"--" }}</td>
+                    <td class="px-6 py-3 text-gray-500">{{ m.date_entree|date:"d/m/Y"|default:"--" }}</td>
+                    <td class="px-6 py-3 text-gray-500">{{ m.date_sortie|date:"d/m/Y"|default:"--" }}</td>
+                    <td class="px-6 py-3">
+                        <div class="flex items-center justify-end gap-1.5">
+                            <a href="{% url 'materiel_detail' m.pk %}"
+                                class="p-2 text-brand-600 hover:bg-brand-50 rounded-lg transition-colors"
+                                title="Details"><i class="fas fa-eye text-xs"></i></a>
+                            <a href="{% url 'materiel_update' m.pk %}" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i class="fas fa-pen-to-square text-xs"></i></a>
+                            <a href="{% url 'materiel_delete' m.pk %}" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i class="fas fa-trash-can text-xs"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="10" class="px-6 py-12 text-center text-gray-400">Aucun materiel trouve</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Pagination -->
+{% if materiels.has_other_pages %}
+<div class="flex items-center justify-center gap-1.5 mt-6">
+    {% if materiels.has_previous %}
+    <a href="?page={{ materiels.previous_page_number }}&q={{ current_q }}&etat={{ current_etat }}&type={{ current_type }}&magasin={{ current_magasin }}"
+        class="px-3.5 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
+        <i class="fas fa-chevron-left text-xs"></i>
+    </a>
+    {% endif %}
+    {% for num in materiels.paginator.page_range %}
+    <a href="?page={{ num }}&q={{ current_q }}&etat={{ current_etat }}&type={{ current_type }}&magasin={{ current_magasin }}"
+        class="w-10 h-10 flex items-center justify-center text-sm font-medium rounded-xl transition-colors {% if materiels.number == num %}bg-brand-800 text-white shadow-sm{% else %}text-gray-600 bg-white border border-gray-200 hover:bg-gray-50{% endif %}">
+        {{ num }}
+    </a>
+    {% endfor %}
+    {% if materiels.has_next %}
+    <a href="?page={{ materiels.next_page_number }}&q={{ current_q }}&etat={{ current_etat }}&type={{ current_type }}&magasin={{ current_magasin }}"
+        class="px-3.5 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
+        <i class="fas fa-chevron-right text-xs"></i>
+    </a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

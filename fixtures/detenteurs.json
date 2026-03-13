@@ -1,0 +1,50 @@
+[
+    {
+        "model": "core.detenteur",
+        "pk": 1,
+        "fields": {
+            "nom": "BENALI Ahmed",
+            "grade": "capitaine",
+            "fonction": "Chef de Section Transmission",
+            "image": "",
+            "created_at": "2025-01-20T08:00:00Z",
+            "updated_at": "2025-01-20T08:00:00Z"
+        }
+    },
+    {
+        "model": "core.detenteur",
+        "pk": 2,
+        "fields": {
+            "nom": "EL FASSI Mohamed",
+            "grade": "lieutenant",
+            "fonction": "Officier de Maintenance",
+            "image": "",
+            "created_at": "2025-01-25T09:00:00Z",
+            "updated_at": "2025-01-25T09:00:00Z"
+        }
+    },
+    {
+        "model": "core.detenteur",
+        "pk": 3,
+        "fields": {
+            "nom": "TAZI Youssef",
+            "grade": "sergent",
+            "fonction": "Responsable Magasin",
+            "image": "",
+            "created_at": "2025-02-01T10:00:00Z",
+            "updated_at": "2025-02-01T10:00:00Z"
+        }
+    },
+    {
+        "model": "core.detenteur",
+        "pk": 4,
+        "fields": {
+            "nom": "IDRISSI Karim",
+            "grade": "commandant",
+            "fonction": "Chef du Bureau Transmission",
+            "image": "",
+            "created_at": "2025-02-10T08:30:00Z",
+            "updated_at": "2025-02-10T08:30:00Z"
+        }
+    }
+]

@@ -1,0 +1,297 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Accès | TRANS-GEST</title>
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Luxury Style CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    <style>
+        .user-mgmt-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .mgmt-grid {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .user-table-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .add-user-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-gold);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-gold);
+            position: sticky;
+            top: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            color: var(--text-primary);
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem;
+            color: var(--primary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 0.9rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-dark);
+            color: #0F1117;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.8rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            border-radius: 99px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-admin { background: rgba(201, 168, 76, 0.2); color: var(--primary); border: 1px solid var(--primary-dark); }
+        .badge-user { background: rgba(107, 105, 96, 0.2); color: var(--text-secondary); border: 1px solid var(--text-muted); }
+
+        .btn-delete {
+            background: none;
+            border: 1px solid var(--danger);
+            color: var(--danger-light);
+            padding: 0.4rem 0.8rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.8rem;
+        }
+
+        .btn-delete:hover {
+            background: var(--danger);
+            color: white;
+            box-shadow: 0 0 10px rgba(192, 57, 43, 0.3);
+        }
+
+        .form-title {
+            font-family: var(--font-heading);
+            color: var(--primary);
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .form-group { margin-bottom: 1.25rem; }
+        .form-label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.5rem; text-transform: uppercase; }
+        .form-input { 
+            width: 100%; padding: 0.75rem; background: var(--bg-input); border: 1px solid var(--border-color);
+            border-radius: var(--radius); color: var(--text-primary); outline: none; transition: var(--transition); 
+        }
+        .form-input:focus { border-color: var(--primary); background: var(--bg-card-hover); }
+
+        .btn-submit {
+            width: 100%; padding: 0.875rem; background: var(--primary); border: none; border-radius: var(--radius);
+            color: #0F1117; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: var(--transition);
+        }
+
+        .btn-submit:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: var(--shadow-gold); }
+
+        .sidebar-back {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            transition: var(--transition);
+        }
+
+        .sidebar-back:hover { color: var(--primary); }
+
+        @media (max-width: 900px) {
+            .mgmt-grid { grid-template-columns: 1fr; }
+            .add-user-card { position: static; }
+        }
+    </style>
+</head>
+
+<body class="luxury-bg">
+
+    <div class="user-mgmt-container">
+        
+        <a href="{% url 'dashboard' %}" class="sidebar-back">
+            <i class="fas fa-arrow-left"></i>
+            Retour au Dashboard
+        </a>
+
+        <div class="header-flex">
+            <div>
+                <h1 style="font-family: var(--font-heading); font-size: 2.5rem; color: var(--primary);">Gestion des Accès</h1>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Administration des utilisateurs du système TRANS-GEST</p>
+            </div>
+            <div class="user-avatar" style="width:48px; height:48px; font-size: 1.2rem;">
+                <i class="fas fa-user-lock"></i>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %}" style="margin-bottom: 2rem;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="mgmt-grid">
+            
+            <!-- User List -->
+            <div class="user-table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Utilisateur</th>
+                            <th>Rôle</th>
+                            <th>Date d'inscription</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for u in users %}
+                        <tr>
+                            <td>
+                                <div class="user-info">
+                                    <div class="user-avatar">{{ u.username|slice:":1"|upper }}</div>
+                                    <div>
+                                        <div style="font-weight:700;">{{ u.username }}</div>
+                                        <div style="font-size:0.75rem; color: var(--text-muted);">{{ u.email }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                {% if u.is_superuser %}
+                                    <span class="badge badge-admin">Super Admin</span>
+                                {% elif u.is_staff %}
+                                    <span class="badge badge-admin">Staff</span>
+                                {% else %}
+                                    <span class="badge badge-user">Utilisateur</span>
+                                {% endif %}
+                            </td>
+                            <td style="color: var(--text-muted);">{{ u.date_joined|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                {% if u.id != request.user.id %}
+                                <form method="POST" style="display:inline;" onsubmit="return confirm('Supprimer cet utilisateur ?');">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="user_id" value="{{ u.id }}">
+                                    <button type="submit" class="btn-delete">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                                {% else %}
+                                <span style="font-size:0.75rem; color: var(--text-muted); font-style: italic;">(C'est vous)</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Add User Form -->
+            <div class="add-user-card">
+                <h2 class="form-title">
+                    <i class="fas fa-user-plus"></i>
+                    Nouvel Accès
+                </h2>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add">
+                    
+                    <div class="form-group">
+                        <label class="form-label">Identifiant</label>
+                        <input type="text" name="username" class="form-input" required placeholder="ex: j.dupont">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-input" required placeholder="ex: contact@far.ma">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Mot de passe</label>
+                        <input type="password" name="password" class="form-input" required placeholder="••••••••">
+                    </div>
+
+                    <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 1.5rem;">
+                        <input type="checkbox" name="is_staff" id="is_staff" style="accent-color: var(--primary);">
+                        <label for="is_staff" class="form-label" style="margin-bottom: 0; cursor: pointer;">Accès Administrateur</label>
+                    </div>
+
+                    <div style="margin-top: 2rem;">
+                        <button type="submit" class="btn-submit">
+                            Créer le compte
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

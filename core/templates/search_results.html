@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% block title %}Recherche{% endblock %}
+
+{% block content %}
+<div class="mb-6 animate-fade-in">
+    <h1 class="text-2xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
+        <i class="fas fa-search text-brand-600"></i>
+        Résultats de Recherche
+    </h1>
+    {% if query %}
+    <p class="text-sm text-gray-500 mt-1">Résultats pour : <span class="text-brand-700 font-semibold">"{{ query }}"</span></p>
+    {% endif %}
+</div>
+
+{% if query %}
+
+{% if results.materiels %}
+<div class="mb-6">
+    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+        <i class="fas fa-boxes-stacked text-brand-600"></i> Matériels <span
+            class="text-xs bg-brand-50 text-brand-700 px-2 py-0.5 rounded-md">{{ results.materiels|length }}</span>
+    </h3>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="border-b border-gray-100">
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Désignation</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">N° Série</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Type</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">État</th>
+                    <th class="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+                {% for m in results.materiels %}
+                <tr class="hover:bg-gray-50/50 transition-colors">
+                    <td class="px-6 py-3 font-semibold text-gray-900">{{ m.designation }}</td>
+                    <td class="px-6 py-3"><code
+                            class="text-xs bg-gray-100 px-2 py-0.5 rounded text-gray-600 font-mono">{{ m.numero_serie }}</code>
+                    </td>
+                    <td class="px-6 py-3"><span
+                            class="text-xs font-medium px-2.5 py-1 rounded-lg bg-brand-50 text-brand-700">{{ m.get_type_materiel_display }}</span></td>
+                    <td class="px-6 py-3"><span
+                            class="text-xs font-semibold px-2.5 py-1 rounded-lg {% if m.etat == 'service' %}bg-green-100 text-green-700{% elif m.etat == 'attente' %}bg-amber-100 text-amber-700{% elif m.etat == 'hors_service' %}bg-red-100 text-red-700{% else %}bg-blue-100 text-blue-700{% endif %}">{{ m.get_etat_display }}</span></td>
+                    <td class="px-6 py-3 text-right"><a href="{% url 'materiel_detail' m.pk %}"
+                            class="p-2 text-brand-600 hover:bg-brand-50 rounded-lg transition-colors"><i
+                                class="fas fa-eye text-xs"></i></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% if results.magasins %}
+<div class="mb-6">
+    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+        <i class="fas fa-building-columns text-brand-600"></i> Magasins <span
+            class="text-xs bg-brand-50 text-brand-700 px-2 py-0.5 rounded-md">{{ results.magasins|length }}</span>
+    </h3>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="border-b border-gray-100">
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Nom</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Localisation</th>
+                    <th class="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+                {% for mag in results.magasins %}
+                <tr class="hover:bg-gray-50/50 transition-colors">
+                    <td class="px-6 py-3 font-semibold text-gray-900">{{ mag.nom }}</td>
+                    <td class="px-6 py-3 text-gray-600">{{ mag.localisation }}</td>
+                    <td class="px-6 py-3 text-right"><a href="{% url 'magasin_update' mag.pk %}"
+                            class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i
+                                class="fas fa-pen-to-square text-xs"></i></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% if results.detenteurs %}
+<div class="mb-6">
+    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+        <i class="fas fa-user-gear text-brand-600"></i> Détenteurs <span
+            class="text-xs bg-brand-50 text-brand-700 px-2 py-0.5 rounded-md">{{ results.detenteurs|length }}</span>
+    </h3>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="border-b border-gray-100">
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Nom</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Grade</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Fonction</th>
+                    <th class="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+                {% for det in results.detenteurs %}
+                <tr class="hover:bg-gray-50/50 transition-colors">
+                    <td class="px-6 py-3 font-semibold text-gray-900">{{ det.nom }}</td>
+                    <td class="px-6 py-3 text-gray-600">{{ det.get_grade_display }}</td>
+                    <td class="px-6 py-3 text-gray-600">{{ det.fonction }}</td>
+                    <td class="px-6 py-3 text-right"><a href="{% url 'detenteur_update' det.pk %}"
+                            class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i
+                                class="fas fa-pen-to-square text-xs"></i></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% if results.documents %}
+<div class="mb-6">
+    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+        <i class="fas fa-folder-open text-brand-600"></i> Documents <span
+            class="text-xs bg-brand-50 text-brand-700 px-2 py-0.5 rounded-md">{{ results.documents|length }}</span>
+    </h3>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="border-b border-gray-100">
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Type</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Date</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Description</th>
+                    <th class="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+                {% for doc in results.documents %}
+                <tr class="hover:bg-gray-50/50 transition-colors">
+                    <td class="px-6 py-3"><span
+                            class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-purple-50 text-purple-700">{{ doc.get_type_display }}</span></td>
+                    <td class="px-6 py-3 text-gray-600">{{ doc.date|date:"d/m/Y" }}</td>
+                    <td class="px-6 py-3 text-gray-600">{{ doc.description|truncatewords:10 }}</td>
+                    <td class="px-6 py-3 text-right"><a href="{% url 'document_update' doc.pk %}"
+                            class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i
+                                class="fas fa-pen-to-square text-xs"></i></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% if not results.materiels and not results.magasins and not results.detenteurs and not results.documents %}
+<div class="bg-white rounded-2xl p-12 text-center shadow-sm border border-gray-100">
+    <i class="fas fa-search text-4xl text-gray-200 mb-3 block"></i>
+    <p class="text-gray-500">Aucun résultat trouvé pour "{{ query }}"</p>
+</div>
+{% endif %}
+
+{% else %}
+<div class="bg-white rounded-2xl p-12 text-center shadow-sm border border-gray-100">
+    <i class="fas fa-search text-4xl text-gray-200 mb-3 block"></i>
+    <p class="text-gray-500">Saisissez un terme pour lancer votre recherche</p>
+</div>
+{% endif %}
+{% endblock %}

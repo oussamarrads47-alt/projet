@@ -1,0 +1,97 @@
+<!-- All 8 Stats in one compact row -->
+<div class="grid grid-cols-8 gap-3 mb-5">
+
+    <!-- Total Matériels (2 cols wide) -->
+    <div class="col-span-2 bg-gradient-to-br from-indigo-600 to-indigo-800 rounded-xl p-4 text-white shadow-md shadow-indigo-500/25 hover:-translate-y-0.5 transition-all duration-200 relative overflow-hidden group">
+        <div class="absolute -top-4 -right-4 w-16 h-16 bg-white/10 rounded-full blur-xl group-hover:scale-150 transition-transform duration-700"></div>
+        <div class="flex items-center justify-between mb-2">
+            <div class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center border border-white/25">
+                <i class="fas fa-boxes-stacked text-xs"></i>
+            </div>
+            <span class="text-[9px] font-bold uppercase tracking-widest bg-white/15 px-2 py-0.5 rounded border border-white/20">Total</span>
+        </div>
+        <p class="text-3xl font-extrabold tracking-tight leading-none">{{ stats.total_materiels }}</p>
+        <p class="text-[10px] text-white/70 font-semibold mt-1 uppercase tracking-wider">Matériels</p>
+    </div>
+
+    <!-- En Service (2 cols) -->
+    <div class="col-span-2 bg-white rounded-xl p-4 shadow-sm border border-emerald-100 hover:-translate-y-0.5 transition-all duration-200 relative overflow-hidden group">
+        <div class="flex items-center justify-between mb-2">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-sm shadow-emerald-500/30">
+                <i class="fas fa-check-circle text-white text-xs"></i>
+            </div>
+            <span class="text-[9px] font-bold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">Actifs</span>
+        </div>
+        <p class="text-3xl font-extrabold text-gray-900 tracking-tight leading-none">{{ stats.en_service }}</p>
+        <p class="text-[10px] text-gray-500 font-semibold mt-1 uppercase tracking-wider">En Service</p>
+    </div>
+
+    <!-- En Attente (2 cols) -->
+    <div class="col-span-2 bg-white rounded-xl p-4 shadow-sm border border-amber-100 hover:-translate-y-0.5 transition-all duration-200 relative overflow-hidden group">
+        <div class="flex items-center justify-between mb-2">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-sm shadow-amber-500/30">
+                <i class="fas fa-clock text-white text-xs"></i>
+            </div>
+            <span class="text-[9px] font-bold uppercase tracking-widest text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-100">Attente</span>
+        </div>
+        <p class="text-3xl font-extrabold text-gray-900 tracking-tight leading-none">{{ stats.en_attente }}</p>
+        <p class="text-[10px] text-gray-500 font-semibold mt-1 uppercase tracking-wider">En Attente</p>
+    </div>
+
+    <!-- Hors Service (2 cols) -->
+    <div class="col-span-2 bg-white rounded-xl p-4 shadow-sm border border-red-100 hover:-translate-y-0.5 transition-all duration-200 relative overflow-hidden group">
+        <div class="flex items-center justify-between mb-2">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center shadow-sm shadow-red-500/30">
+                <i class="fas fa-exclamation-triangle text-white text-xs"></i>
+            </div>
+            <span class="text-[9px] font-bold uppercase tracking-widest text-red-600 bg-red-50 px-2 py-0.5 rounded border border-red-100">Alerte</span>
+        </div>
+        <p class="text-3xl font-extrabold text-gray-900 tracking-tight leading-none">{{ stats.hors_service }}</p>
+        <p class="text-[10px] text-gray-500 font-semibold mt-1 uppercase tracking-wider">Hors Service</p>
+    </div>
+
+    <!-- Magasins -->
+    <div class="col-span-2 bg-white rounded-xl px-4 py-3 shadow-sm border border-indigo-50 flex items-center gap-3 hover:border-indigo-100 transition-colors">
+        <div class="w-9 h-9 rounded-lg bg-indigo-50 flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-building-columns text-indigo-600 text-sm"></i>
+        </div>
+        <div>
+            <p class="text-xl font-bold text-gray-900 leading-none">{{ stats.total_magasins }}</p>
+            <p class="text-[10px] text-gray-500 mt-0.5 font-semibold">Magasins</p>
+        </div>
+    </div>
+
+    <!-- Détenteurs -->
+    <div class="col-span-2 bg-white rounded-xl px-4 py-3 shadow-sm border border-blue-50 flex items-center gap-3 hover:border-blue-100 transition-colors">
+        <div class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-users text-blue-600 text-sm"></i>
+        </div>
+        <div>
+            <p class="text-xl font-bold text-gray-900 leading-none">{{ stats.total_detenteurs }}</p>
+            <p class="text-[10px] text-gray-500 mt-0.5 font-semibold">Détenteurs</p>
+        </div>
+    </div>
+
+    <!-- Mouvements -->
+    <div class="col-span-2 bg-white rounded-xl px-4 py-3 shadow-sm border border-violet-50 flex items-center gap-3 hover:border-violet-100 transition-colors">
+        <div class="w-9 h-9 rounded-lg bg-violet-50 flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-right-left text-violet-600 text-sm"></i>
+        </div>
+        <div>
+            <p class="text-xl font-bold text-gray-900 leading-none">{{ stats.total_mouvements }}</p>
+            <p class="text-[10px] text-gray-500 mt-0.5 font-semibold">Mouvements</p>
+        </div>
+    </div>
+
+    <!-- Documents -->
+    <div class="col-span-2 bg-white rounded-xl px-4 py-3 shadow-sm border border-orange-50 flex items-center gap-3 hover:border-orange-100 transition-colors">
+        <div class="w-9 h-9 rounded-lg bg-orange-50 flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-file-alt text-orange-600 text-sm"></i>
+        </div>
+        <div>
+            <p class="text-xl font-bold text-gray-900 leading-none">{{ stats.total_documents }}</p>
+            <p class="text-[10px] text-gray-500 mt-0.5 font-semibold">Documents</p>
+        </div>
+    </div>
+
+</div>

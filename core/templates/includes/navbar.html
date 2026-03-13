@@ -1,0 +1,99 @@
+{% load static %}
+<!-- ── SIDEBAR ── -->
+<aside id="sidebar" class="fixed top-0 left-0 z-50 flex flex-col h-screen overflow-hidden">
+
+    <!-- Brand -->
+    <div class="sidebar-brand">
+        <img src="{% static 'images/transgest_logo.png' %}" alt="Logo">
+        <div class="sidebar-brand-text">
+            <div class="name">TRANS-GEST</div>
+            <div class="sub">Gestion des Matériels</div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 px-2 py-4 overflow-y-auto">
+
+        <a href="{% url 'welcome' %}"
+           class="sidebar-link {% if request.resolver_match.url_name == 'welcome' %}active{% endif %}">
+            <i class="fas fa-house-chimney"></i>
+            <span>Accueil</span>
+        </a>
+
+
+
+        <a href="{% url 'materiel_list' %}"
+           class="sidebar-link {% if 'materiel' in request.resolver_match.url_name %}active{% endif %}">
+            <i class="fas fa-boxes-stacked"></i>
+            <span>Matériels</span>
+        </a>
+
+        <a href="{% url 'magasin_list' %}"
+           class="sidebar-link {% if 'magasin' in request.resolver_match.url_name %}active{% endif %}">
+            <i class="fas fa-building-columns"></i>
+            <span>Magasins</span>
+        </a>
+
+        <a href="{% url 'detenteur_list' %}"
+           class="sidebar-link {% if 'detenteur' in request.resolver_match.url_name %}active{% endif %}">
+            <i class="fas fa-user-gear"></i>
+            <span>Détenteurs</span>
+        </a>
+
+        <a href="{% url 'document_list' %}"
+           class="sidebar-link {% if 'document' in request.resolver_match.url_name %}active{% endif %}">
+            <i class="fas fa-folder-open"></i>
+            <span>Documents</span>
+        </a>
+
+        <a href="{% url 'situation_report' %}"
+           class="sidebar-link {% if request.resolver_match.url_name == 'situation_report' %}active{% endif %}">
+            <i class="fas fa-file-invoice"></i>
+            <span>Situation Globale</span>
+        </a>
+
+        <a href="{% url 'inventaire_logistique' %}"
+           class="sidebar-link {% if request.resolver_match.url_name == 'inventaire_logistique' %}active{% endif %}">
+            <i class="fas fa-table-list"></i>
+            <span>Inv. Logistique</span>
+        </a>
+
+        <a href="{% url 'mouvement_list' %}"
+           class="sidebar-link {% if 'mouvement' in request.resolver_match.url_name %}active{% endif %}">
+            <i class="fas fa-right-left"></i>
+            <span>Mouvements</span>
+        </a>
+
+        {% if user.is_superuser %}
+        <a href="{% url 'user_list' %}"
+           class="sidebar-link {% if request.resolver_match.url_name == 'user_list' %}active{% endif %}">
+            <i class="fas fa-user-lock"></i>
+            <span>Accès</span>
+        </a>
+
+        <a href="/admin/" target="_blank" class="sidebar-link">
+            <i class="fas fa-sliders"></i>
+            <span>Administration</span>
+        </a>
+        {% endif %}
+
+    </nav>
+    <!-- Sidebar User Section (Static Compact Red Accent - Reduced Width) -->
+    <div class="px-4 pb-4 mt-auto">
+        <div class="flex items-center gap-2 px-2 py-2 rounded-xl bg-white dark:bg-slate-800 border-l-[3px] border-red-600 shadow-sm border-y border-r border-gray-100 dark:border-slate-700/50">
+            <div class="w-7 h-7 flex-shrink-0 rounded-lg bg-red-600 flex items-center justify-center text-white text-[11px] font-bold">
+                {{ user.username|first|upper }}
+            </div>
+            <div class="flex-1 min-w-0">
+                <p class="text-xs font-bold text-gray-900 truncate dark:text-white leading-none">{{ user.username }}</p>
+                <p class="text-[9px] text-red-600 font-bold uppercase mt-0.5 tracking-tight">Manager</p>
+            </div>
+            <a href="{% url 'logout' %}" class="flex-shrink-0 p-1 text-gray-400 hover:text-red-600 transition-colors" title="Déconnexion">
+                <i class="fas fa-power-off text-[10px]"></i>
+            </a>
+        </div>
+    </div>
+
+</aside>
+
+<div id="sidebar-overlay"></div>

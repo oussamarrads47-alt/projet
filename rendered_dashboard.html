@@ -1,0 +1,965 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="TRANS-GEST — Plateforme d'Excellence pour la Gestion des Matériels de Transmission des Forces Armées Royales du Maroc">
+    <meta name="theme-color" content="#166534">
+    <title>Tableau de Bord | Gestion d'Excellence</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        * {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background: rgba(22, 101, 52, 0.2);
+            border-radius: 20px;
+        }
+
+        .sidebar-link.active {
+            background: linear-gradient(135deg, #166534, #15803d);
+            color: white !important;
+        }
+
+        .sidebar-link:not(.active):hover {
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.4s ease-out forwards;
+        }
+
+        .animate-fade-in-delay-1 {
+            animation: fadeInUp 0.4s ease-out 0.1s forwards;
+            opacity: 0;
+        }
+
+        .animate-fade-in-delay-2 {
+            animation: fadeInUp 0.4s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .animate-fade-in-delay-3 {
+            animation: fadeInUp 0.4s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Form control overrides for Django widgets */
+        .tw-form-control {
+            width: 100%;
+            padding: 0.625rem 0.875rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            color: #111827;
+            background-color: white;
+            transition: all 0.2s;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .tw-form-control:focus {
+            border-color: #22c55e;
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+        }
+
+        select.tw-form-control {
+            appearance: auto;
+        }
+
+        textarea.tw-form-control {
+            min-height: 80px;
+            resize: vertical;
+        }
+    </style>
+    
+</head>
+
+<body class="bg-gray-50 font-sans antialiased">
+
+    <!-- Mobile Overlay -->
+    <div id="sidebar-overlay" onclick="toggleSidebar()"
+        class="fixed inset-0 bg-black/40 z-40 hidden lg:hidden transition-opacity"></div>
+
+    <!-- Sidebar -->
+    
+<!-- Sidebar -->
+<aside id="sidebar" class="fixed top-0 left-0 z-50 w-[260px] h-screen bg-white border-r border-gray-100 flex flex-col transition-transform duration-300 lg:translate-x-0 -translate-x-full shadow-xl lg:shadow-none">
+
+    <!-- Brand -->
+    <div class="px-6 py-6 border-b border-gray-100">
+        <div class="flex items-center gap-3">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-10 h-10">
+  <defs>
+    <linearGradient id="sidebarLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#166534"/>
+      <stop offset="100%" style="stop-color:#22c55e"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 2 L36 10 L36 22 C36 30 28 37 20 39 C12 37 4 30 4 22 L4 10 Z" fill="url(#sidebarLogoGrad)" opacity="0.9"/>
+  <path d="M20 2 L36 10 L36 22 C36 30 28 37 20 39 C12 37 4 30 4 22 L4 10 Z" fill="none" stroke="white" stroke-width="0.5" opacity="0.3"/>
+  <circle cx="20" cy="22" r="3" fill="white"/>
+  <rect x="19" y="10" width="2" height="12" rx="1" fill="white"/>
+  <line x1="14" y1="16" x2="19" y2="20" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="26" y1="16" x2="21" y2="20" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="11" y1="19" x2="18" y2="22" stroke="white" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
+  <line x1="29" y1="19" x2="22" y2="22" stroke="white" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
+</svg>
+            <div>
+                <h1 class="text-lg font-bold text-gray-900 tracking-tight">TRANS-GEST</h1>
+                <p class="text-[10px] text-gray-400 font-medium uppercase tracking-widest">Gestion d'Excellence</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto scrollbar-thin">
+
+        <p class="px-3 mb-2 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Vue d'ensemble</p>
+
+        <a href="/" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 active">
+            <i class="fas fa-th-large w-5 text-center text-[13px]"></i>
+            <span>Tableau de Bord</span>
+        </a>
+
+        <p class="px-3 mt-6 mb-2 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Gestion des Actifs</p>
+
+        <a href="/materiels/" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-gray-600">
+            <i class="fas fa-satellite-dish w-5 text-center text-[13px]"></i>
+            <span>Matériels</span>
+        </a>
+
+        <a href="/magasins/" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-gray-600">
+            <i class="fas fa-warehouse w-5 text-center text-[13px]"></i>
+            <span>Magasins</span>
+        </a>
+
+        <a href="/detenteurs/" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-gray-600">
+            <i class="fas fa-users w-5 text-center text-[13px]"></i>
+            <span>Détenteurs</span>
+        </a>
+
+        <p class="px-3 mt-6 mb-2 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Documents & Flux</p>
+
+        <a href="/documents/" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-gray-600">
+            <i class="fas fa-file-alt w-5 text-center text-[13px]"></i>
+            <span>Documents</span>
+        </a>
+
+        <a href="/mouvements/" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-gray-600">
+            <i class="fas fa-exchange-alt w-5 text-center text-[13px]"></i>
+            <span>Mouvements</span>
+        </a>
+
+    </nav>
+
+    <!-- Sidebar Footer -->
+    <div class="px-4 py-4 border-t border-gray-100 space-y-1">
+        
+        <a href="/admin/" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-all">
+            <i class="fas fa-cog w-5 text-center text-[13px]"></i>
+            <span>Administration</span>
+        </a>
+        
+        
+        <a href="/logout/" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 hover:text-red-600 transition-all">
+            <i class="fas fa-sign-out-alt w-5 text-center text-[13px]"></i>
+            <span>Déconnexion</span>
+        </a>
+        
+    </div>
+
+</aside>
+
+    <!-- Main Content Area -->
+    <div class="lg:ml-[260px] min-h-screen flex flex-col">
+
+        <!-- Top Navbar -->
+        <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-lg border-b border-gray-100">
+            <div class="flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16">
+                <!-- Mobile menu button -->
+                <button onclick="toggleSidebar()"
+                    class="lg:hidden p-2 rounded-xl text-gray-500 hover:bg-gray-100 hover:text-brand-800 transition-all">
+                    <i class="fas fa-bars text-lg"></i>
+                </button>
+
+                <!-- Search bar -->
+                <form action="/search/" method="GET" class="hidden sm:flex items-center flex-1 max-w-lg ml-4">
+                    <div class="relative w-full">
+                        <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                        <input type="text" name="q" value="" placeholder="Rechercher un actif..."
+                            class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all">
+                    </div>
+                </form>
+
+                <!-- Right items -->
+                <div class="flex items-center gap-3">
+                    
+                    <div class="hidden sm:flex items-center gap-3 pl-3 border-l border-gray-200">
+                        <div
+                            class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-800 to-brand-600 flex items-center justify-center text-white text-sm font-semibold shadow-sm">
+                            A
+                        </div>
+                        <div class="hidden md:block">
+                            <p class="text-sm font-semibold text-gray-900 leading-tight">Administrateur TRANS-GEST</p>
+                            <p class="text-xs text-gray-500">Administrateur</p>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </header>
+
+        <!-- Messages -->
+        
+
+        <!-- Main Content -->
+        <main class="flex-1 px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+            
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 animate-fade-in">
+    <div>
+        <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 tracking-tight">Tableau de Bord</h1>
+        <p class="text-sm text-gray-500 mt-1">Vue d'ensemble stratégique de votre parc de matériels</p>
+    </div>
+    <a href="/materiels/create/"
+        class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-brand-800 to-brand-700 text-white text-sm font-semibold rounded-xl hover:shadow-lg hover:shadow-brand-800/25 transition-all duration-300 hover:-translate-y-0.5">
+        <i class="fas fa-plus text-xs"></i> Ajouter un Matériel
+    </a>
+</div>
+
+<!-- Statistics Cards -->
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8">
+
+    <!-- Total Matériels - Gradient Card -->
+    <div
+        class="bg-gradient-to-br from-brand-800 to-brand-700 rounded-2xl p-6 text-white shadow-lg shadow-brand-800/20 hover:shadow-xl hover:shadow-brand-800/30 transition-all duration-300 animate-fade-in">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                <i class="fas fa-satellite-dish text-lg"></i>
+            </div>
+            <span class="text-xs font-medium bg-white/20 px-2.5 py-1 rounded-lg backdrop-blur-sm">
+                <i class="fas fa-arrow-up text-[10px] mr-1"></i>Total
+            </span>
+        </div>
+        <p class="text-4xl font-bold tracking-tight">20</p>
+        <p class="text-sm text-white/70 mt-1">Total Matériels</p>
+    </div>
+
+    <!-- En Service -->
+    <div
+        class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 animate-fade-in-delay-1">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center">
+                <i class="fas fa-check-circle text-green-500 text-lg"></i>
+            </div>
+            <span class="text-[11px] font-medium text-green-600 bg-green-50 px-2.5 py-1 rounded-lg">
+                <i class="fas fa-arrow-up text-[9px] mr-0.5"></i> Actifs
+            </span>
+        </div>
+        <p class="text-4xl font-bold text-gray-900 tracking-tight">14</p>
+        <p class="text-sm text-gray-500 mt-1">En Service</p>
+    </div>
+
+    <!-- En Attente -->
+    <div
+        class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 animate-fade-in-delay-2">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center">
+                <i class="fas fa-clock text-amber-500 text-lg"></i>
+            </div>
+            <span class="text-[11px] font-medium text-amber-600 bg-amber-50 px-2.5 py-1 rounded-lg">En attente</span>
+        </div>
+        <p class="text-4xl font-bold text-gray-900 tracking-tight">2</p>
+        <p class="text-sm text-gray-500 mt-1">En Attente</p>
+    </div>
+
+    <!-- Hors Service -->
+    <div
+        class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 animate-fade-in-delay-3">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center">
+                <i class="fas fa-exclamation-triangle text-red-500 text-lg"></i>
+            </div>
+            <span class="text-[11px] font-medium text-red-600 bg-red-50 px-2.5 py-1 rounded-lg">Alerte</span>
+        </div>
+        <p class="text-4xl font-bold text-gray-900 tracking-tight">2</p>
+        <p class="text-sm text-gray-500 mt-1">Hors Service</p>
+    </div>
+
+</div>
+
+<!-- Secondary Stats Row -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+    <div class="bg-white rounded-xl px-5 py-4 shadow-sm border border-gray-100 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-brand-50 flex items-center justify-center">
+            <i class="fas fa-warehouse text-brand-600 text-sm"></i>
+        </div>
+        <div>
+            <p class="text-xl font-bold text-gray-900">3</p>
+            <p class="text-xs text-gray-500">Magasins</p>
+        </div>
+    </div>
+    <div class="bg-white rounded-xl px-5 py-4 shadow-sm border border-gray-100 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+            <i class="fas fa-users text-blue-600 text-sm"></i>
+        </div>
+        <div>
+            <p class="text-xl font-bold text-gray-900">4</p>
+            <p class="text-xs text-gray-500">Détenteurs</p>
+        </div>
+    </div>
+    <div class="bg-white rounded-xl px-5 py-4 shadow-sm border border-gray-100 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center">
+            <i class="fas fa-exchange-alt text-purple-600 text-sm"></i>
+        </div>
+        <div>
+            <p class="text-xl font-bold text-gray-900">15</p>
+            <p class="text-xs text-gray-500">Mouvements</p>
+        </div>
+    </div>
+    <div class="bg-white rounded-xl px-5 py-4 shadow-sm border border-gray-100 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center">
+            <i class="fas fa-file-alt text-orange-600 text-sm"></i>
+        </div>
+        <div>
+            <p class="text-xl font-bold text-gray-900">10</p>
+            <p class="text-xs text-gray-500">Documents</p>
+        </div>
+    </div>
+</div>
+
+<!-- Charts + Team Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+
+    <!-- Project Analytics (Bar Chart) -->
+    <div class="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900">Répartition par Catégorie</h3>
+                <p class="text-xs text-gray-500 mt-0.5">Analyse des types de matériels</p>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-brand-50 flex items-center justify-center">
+                <i class="fas fa-chart-bar text-brand-600"></i>
+            </div>
+        </div>
+        <canvas id="typeChart" height="200"></canvas>
+    </div>
+
+    <!-- Project Progress Ring -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col items-center justify-center">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">Disponibilité</h3>
+        <p class="text-xs text-gray-500 mb-6">Taux de matériels en service</p>
+
+        <!-- SVG Progress Ring -->
+        <div class="relative w-44 h-44 mb-4">
+            <svg class="w-full h-full -rotate-90" viewBox="0 0 160 160">
+                <circle cx="80" cy="80" r="70" stroke="#f3f4f6" stroke-width="12" fill="none" />
+                <circle id="progressCircle" cx="80" cy="80" r="70" stroke="url(#progressGradient)" stroke-width="12"
+                    fill="none" stroke-linecap="round" stroke-dasharray="439.82" stroke-dashoffset="439.82"
+                    style="transition: stroke-dashoffset 1.5s ease-out;" />
+                <defs>
+                    <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#166534" />
+                        <stop offset="100%" style="stop-color:#22c55e" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span id="progressPercent" class="text-4xl font-bold text-gray-900">0%</span>
+                <span class="text-xs text-gray-500 mt-1">En Service</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 w-full text-center text-xs">
+            <div class="bg-green-50 rounded-lg py-2">
+                <p class="font-bold text-green-700">14</p>
+                <p class="text-green-600">Actifs</p>
+            </div>
+            <div class="bg-red-50 rounded-lg py-2">
+                <p class="font-bold text-red-700">2</p>
+                <p class="text-red-600">Hors Service</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- State Chart + Time Tracker -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+
+    <!-- État Opérationnel -->
+    <div class="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900">État Opérationnel</h3>
+                <p class="text-xs text-gray-500 mt-0.5">Distribution par état des actifs</p>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+                <i class="fas fa-chart-pie text-blue-600"></i>
+            </div>
+        </div>
+        <canvas id="etatChart" height="200"></canvas>
+    </div>
+
+    <!-- Time Tracker Widget -->
+    <div
+        class="bg-gradient-to-br from-brand-800 to-brand-900 rounded-2xl p-6 shadow-lg shadow-brand-900/20 text-white flex flex-col justify-between">
+        <div>
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold">Activité Récente</h3>
+                <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center backdrop-blur-sm">
+                    <i class="fas fa-clock text-white/90"></i>
+                </div>
+            </div>
+            <p class="text-sm text-white/60 mb-6">Suivi de votre session</p>
+
+            <!-- Timer -->
+            <div class="text-center mb-6">
+                <p id="sessionTimer" class="text-5xl font-bold tracking-tight font-mono">00:00:00</p>
+                <p class="text-xs text-white/50 mt-2">Temps de session</p>
+            </div>
+        </div>
+
+        <!-- Stats in widget -->
+        <div class="space-y-3">
+            <div class="flex items-center justify-between text-sm">
+                <span class="text-white/70">Mouvements aujourd'hui</span>
+                <span class="font-semibold">15</span>
+            </div>
+            <div class="flex items-center justify-between text-sm">
+                <span class="text-white/70">Documents traités</span>
+                <span class="font-semibold">10</span>
+            </div>
+            <div class="w-full h-px bg-white/10 my-2"></div>
+            <div class="flex items-center gap-2">
+                <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+                <span class="text-xs text-white/60">Système opérationnel</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Materials Section -->
+<div class="flex items-center justify-between mb-5">
+    <div>
+        <h2 class="text-lg font-semibold text-gray-900">Derniers Matériels</h2>
+        <p class="text-xs text-gray-500">Récemment enregistrés dans le système</p>
+    </div>
+    <a href="/materiels/"
+        class="text-sm font-medium text-brand-700 hover:text-brand-800 flex items-center gap-1.5 transition-colors">
+        Voir tout <i class="fas fa-arrow-right text-xs"></i>
+    </a>
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    
+    <div
+        class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
+        <div
+            class="h-36 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center relative overflow-hidden">
+            
+            <img src="/media/materiels/M%C3%A2t_T%C3%A9lescopique_CDTE_15m.jpg" alt="Mât Télescopique CDTE 15m"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            
+            <span class="absolute top-3 left-3 text-[10px] font-semibold px-2.5 py-1 rounded-lg
+                bg-green-100 text-green-700
+                ">
+                En Service
+            </span>
+        </div>
+        <div class="p-4">
+            <h4 class="font-semibold text-gray-900 text-sm leading-tight truncate">Mât Télescopique CDTE 15m</h4>
+            <p class="text-xs text-gray-500 mt-1"><i class="fas fa-barcode mr-1"></i>MT-2025-020</p>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
+                <span class="text-xs text-gray-400"><i class="fas fa-warehouse mr-1"></i>Magasin Technique Nord</span>
+                <a href="/materiels/20/"
+                    class="text-xs font-medium text-brand-700 hover:text-brand-800 transition-colors">
+                    Détails <i class="fas fa-arrow-right text-[9px]"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div
+        class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
+        <div
+            class="h-36 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center relative overflow-hidden">
+            
+            <img src="/media/materiels/Radio_UHF_Kenwood_NX-5300.png" alt="Radio UHF Kenwood NX-5300"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            
+            <span class="absolute top-3 left-3 text-[10px] font-semibold px-2.5 py-1 rounded-lg
+                bg-red-100 text-red-700
+                ">
+                Hors Service
+            </span>
+        </div>
+        <div class="p-4">
+            <h4 class="font-semibold text-gray-900 text-sm leading-tight truncate">Radio UHF Kenwood NX-5300</h4>
+            <p class="text-xs text-gray-500 mt-1"><i class="fas fa-barcode mr-1"></i>KW-2025-019</p>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
+                <span class="text-xs text-gray-400"><i class="fas fa-warehouse mr-1"></i>Magasin Central de Transmission</span>
+                <a href="/materiels/19/"
+                    class="text-xs font-medium text-brand-700 hover:text-brand-800 transition-colors">
+                    Détails <i class="fas fa-arrow-right text-[9px]"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div
+        class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
+        <div
+            class="h-36 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center relative overflow-hidden">
+            
+            <img src="/media/materiels/GPS_Militaire_Garmin_Foretrex_701.jpg" alt="GPS Militaire Garmin Foretrex 701"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            
+            <span class="absolute top-3 left-3 text-[10px] font-semibold px-2.5 py-1 rounded-lg
+                bg-green-100 text-green-700
+                ">
+                En Service
+            </span>
+        </div>
+        <div class="p-4">
+            <h4 class="font-semibold text-gray-900 text-sm leading-tight truncate">GPS Militaire Garmin Foretrex 701</h4>
+            <p class="text-xs text-gray-500 mt-1"><i class="fas fa-barcode mr-1"></i>GT-2025-018</p>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
+                <span class="text-xs text-gray-400"><i class="fas fa-warehouse mr-1"></i>Dépôt Régional Sud</span>
+                <a href="/materiels/18/"
+                    class="text-xs font-medium text-brand-700 hover:text-brand-800 transition-colors">
+                    Détails <i class="fas fa-arrow-right text-[9px]"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div
+        class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
+        <div
+            class="h-36 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center relative overflow-hidden">
+            
+            <img src="/media/materiels/C%C3%A2ble_Fibre_Optique_Tactique_500m.avif" alt="Câble Fibre Optique Tactique 500m"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            
+            <span class="absolute top-3 left-3 text-[10px] font-semibold px-2.5 py-1 rounded-lg
+                bg-blue-100 text-blue-700">
+                Approvisionnement
+            </span>
+        </div>
+        <div class="p-4">
+            <h4 class="font-semibold text-gray-900 text-sm leading-tight truncate">Câble Fibre Optique Tactique 500m</h4>
+            <p class="text-xs text-gray-500 mt-1"><i class="fas fa-barcode mr-1"></i>FO-2025-017</p>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
+                <span class="text-xs text-gray-400"><i class="fas fa-warehouse mr-1"></i>Magasin Technique Nord</span>
+                <a href="/materiels/17/"
+                    class="text-xs font-medium text-brand-700 hover:text-brand-800 transition-colors">
+                    Détails <i class="fas fa-arrow-right text-[9px]"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div
+        class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
+        <div
+            class="h-36 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center relative overflow-hidden">
+            
+            <img src="/media/materiels/M350-C.jpg" alt="Drone de Reconnaissance DJI Matrice 300"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            
+            <span class="absolute top-3 left-3 text-[10px] font-semibold px-2.5 py-1 rounded-lg
+                bg-green-100 text-green-700
+                ">
+                En Service
+            </span>
+        </div>
+        <div class="p-4">
+            <h4 class="font-semibold text-gray-900 text-sm leading-tight truncate">Drone de Reconnaissance DJI Matrice 300</h4>
+            <p class="text-xs text-gray-500 mt-1"><i class="fas fa-barcode mr-1"></i>DJ-2025-016</p>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
+                <span class="text-xs text-gray-400"><i class="fas fa-warehouse mr-1"></i>Magasin Central de Transmission</span>
+                <a href="/materiels/16/"
+                    class="text-xs font-medium text-brand-700 hover:text-brand-800 transition-colors">
+                    Détails <i class="fas fa-arrow-right text-[9px]"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div
+        class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
+        <div
+            class="h-36 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center relative overflow-hidden">
+            
+            <img src="/media/materiels/Groupe_%C3%89lectrog%C3%A8ne_5kVA_Kipor.png" alt="Groupe Électrogène 5kVA Kipor"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            
+            <span class="absolute top-3 left-3 text-[10px] font-semibold px-2.5 py-1 rounded-lg
+                bg-green-100 text-green-700
+                ">
+                En Service
+            </span>
+        </div>
+        <div class="p-4">
+            <h4 class="font-semibold text-gray-900 text-sm leading-tight truncate">Groupe Électrogène 5kVA Kipor</h4>
+            <p class="text-xs text-gray-500 mt-1"><i class="fas fa-barcode mr-1"></i>KP-2025-015</p>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
+                <span class="text-xs text-gray-400"><i class="fas fa-warehouse mr-1"></i>Dépôt Régional Sud</span>
+                <a href="/materiels/15/"
+                    class="text-xs font-medium text-brand-700 hover:text-brand-800 transition-colors">
+                    Détails <i class="fas fa-arrow-right text-[9px]"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div
+        class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
+        <div
+            class="h-36 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center relative overflow-hidden">
+            
+            <img src="/media/materiels/Radio_HF_Codan_Envoy_X2.jpg" alt="Radio HF Codan Envoy X2"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            
+            <span class="absolute top-3 left-3 text-[10px] font-semibold px-2.5 py-1 rounded-lg
+                bg-green-100 text-green-700
+                ">
+                En Service
+            </span>
+        </div>
+        <div class="p-4">
+            <h4 class="font-semibold text-gray-900 text-sm leading-tight truncate">Radio HF Codan Envoy X2</h4>
+            <p class="text-xs text-gray-500 mt-1"><i class="fas fa-barcode mr-1"></i>CD-2025-014</p>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
+                <span class="text-xs text-gray-400"><i class="fas fa-warehouse mr-1"></i>Magasin Central de Transmission</span>
+                <a href="/materiels/14/"
+                    class="text-xs font-medium text-brand-700 hover:text-brand-800 transition-colors">
+                    Détails <i class="fas fa-arrow-right text-[9px]"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div
+        class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
+        <div
+            class="h-36 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center relative overflow-hidden">
+            
+            <img src="/media/materiels/T%C3%A9l%C3%A9phone_de_Campagne_TA-312.jpg" alt="Téléphone de Campagne TA-312"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            
+            <span class="absolute top-3 left-3 text-[10px] font-semibold px-2.5 py-1 rounded-lg
+                bg-amber-100 text-amber-700
+                ">
+                En Attente
+            </span>
+        </div>
+        <div class="p-4">
+            <h4 class="font-semibold text-gray-900 text-sm leading-tight truncate">Téléphone de Campagne TA-312</h4>
+            <p class="text-xs text-gray-500 mt-1"><i class="fas fa-barcode mr-1"></i>TA-2025-013</p>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
+                <span class="text-xs text-gray-400"><i class="fas fa-warehouse mr-1"></i>Magasin Technique Nord</span>
+                <a href="/materiels/13/"
+                    class="text-xs font-medium text-brand-700 hover:text-brand-800 transition-colors">
+                    Détails <i class="fas fa-arrow-right text-[9px]"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<!-- Recent Movements -->
+<div class="flex items-center justify-between mb-5">
+    <div>
+        <h2 class="text-lg font-semibold text-gray-900">Derniers Mouvements</h2>
+        <p class="text-xs text-gray-500">Historique des flux récents</p>
+    </div>
+    <a href="/mouvements/"
+        class="text-sm font-medium text-brand-700 hover:text-brand-800 flex items-center gap-1.5 transition-colors">
+        Voir tout <i class="fas fa-arrow-right text-xs"></i>
+    </a>
+</div>
+
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="border-b border-gray-100">
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Type
+                    </th>
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Date
+                    </th>
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                        Matériel</th>
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                        Document</th>
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Qté
+                    </th>
+                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                        Observations</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+                
+                <tr class="hover:bg-gray-50/50 transition-colors">
+                    <td class="px-6 py-4">
+                        <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-lg
+                            bg-purple-100 text-purple-700">
+                            Reversement
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-gray-600">15/05/2025</td>
+                    <td class="px-6 py-4 font-medium text-gray-900">Radio UHF Kenwood NX-5300</td>
+                    <td class="px-6 py-4 text-gray-600">50/7</td>
+                    <td class="px-6 py-4 text-gray-900 font-semibold">1</td>
+                    <td class="px-6 py-4 text-gray-500 max-w-[200px] truncate">Reversement radio défectueuse</td>
+                </tr>
+                
+                <tr class="hover:bg-gray-50/50 transition-colors">
+                    <td class="px-6 py-4">
+                        <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-lg
+                            bg-blue-100 text-blue-700
+                            ">
+                            Perception
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-gray-600">10/05/2025</td>
+                    <td class="px-6 py-4 font-medium text-gray-900">GPS Militaire Garmin Foretrex 701</td>
+                    <td class="px-6 py-4 text-gray-600">50/4</td>
+                    <td class="px-6 py-4 text-gray-900 font-semibold">2</td>
+                    <td class="px-6 py-4 text-gray-500 max-w-[200px] truncate">Perception GPS Garmin</td>
+                </tr>
+                
+                <tr class="hover:bg-gray-50/50 transition-colors">
+                    <td class="px-6 py-4">
+                        <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-lg
+                            bg-blue-100 text-blue-700
+                            ">
+                            Perception
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-gray-600">05/05/2025</td>
+                    <td class="px-6 py-4 font-medium text-gray-900">Drone de Reconnaissance DJI Matrice 300</td>
+                    <td class="px-6 py-4 text-gray-600">50/4</td>
+                    <td class="px-6 py-4 text-gray-900 font-semibold">1</td>
+                    <td class="px-6 py-4 text-gray-500 max-w-[200px] truncate">Perception drone DJI</td>
+                </tr>
+                
+                <tr class="hover:bg-gray-50/50 transition-colors">
+                    <td class="px-6 py-4">
+                        <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-lg
+                            bg-red-100 text-red-700
+                            ">
+                            Sortie
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-gray-600">01/05/2025</td>
+                    <td class="px-6 py-4 font-medium text-gray-900">Groupe Électrogène 5kVA Kipor</td>
+                    <td class="px-6 py-4 text-gray-600">Autre</td>
+                    <td class="px-6 py-4 text-gray-900 font-semibold">1</td>
+                    <td class="px-6 py-4 text-gray-500 max-w-[200px] truncate">Sortie groupe électrogène</td>
+                </tr>
+                
+                <tr class="hover:bg-gray-50/50 transition-colors">
+                    <td class="px-6 py-4">
+                        <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-lg
+                            bg-blue-100 text-blue-700
+                            ">
+                            Perception
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-gray-600">20/04/2025</td>
+                    <td class="px-6 py-4 font-medium text-gray-900">Radio HF Codan Envoy X2</td>
+                    <td class="px-6 py-4 text-gray-600">50/4</td>
+                    <td class="px-6 py-4 text-gray-900 font-semibold">1</td>
+                    <td class="px-6 py-4 text-gray-500 max-w-[200px] truncate">Perception radio HF Codan</td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+        </main>
+
+        <!-- Footer -->
+        <!-- Enhanced Footer -->
+<footer class="border-t border-gray-100 bg-white mt-auto print:hidden">
+    <div class="px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+            <!-- Brand Column -->
+            <div class="sm:col-span-2 lg:col-span-1">
+                <div class="flex items-center gap-2.5 mb-3">
+                    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-8 h-8">
+  <defs>
+    <linearGradient id="footerLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#166534"/>
+      <stop offset="100%" style="stop-color:#22c55e"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 2 L36 10 L36 22 C36 30 28 37 20 39 C12 37 4 30 4 22 L4 10 Z" fill="url(#footerLogoGrad)" opacity="0.9"/>
+  <path d="M20 2 L36 10 L36 22 C36 30 28 37 20 39 C12 37 4 30 4 22 L4 10 Z" fill="none" stroke="white" stroke-width="0.5" opacity="0.3"/>
+  <circle cx="20" cy="22" r="3" fill="white"/>
+  <rect x="19" y="10" width="2" height="12" rx="1" fill="white"/>
+  <line x1="14" y1="16" x2="19" y2="20" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="26" y1="16" x2="21" y2="20" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="11" y1="19" x2="18" y2="22" stroke="white" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
+  <line x1="29" y1="19" x2="22" y2="22" stroke="white" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
+</svg>
+                    <span class="text-sm font-bold text-gray-900">TRANS-GEST</span>
+                </div>
+                <p class="text-xs text-gray-400 leading-relaxed">Plateforme d'Excellence pour la Gestion des Matériels de Transmission des Forces Armées Royales du Maroc.</p>
+            </div>
+
+            <!-- Quick Links -->
+            <div>
+                <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Navigation</h4>
+                <ul class="space-y-2 text-xs text-gray-400">
+                    <li><a href="/" class="hover:text-brand-700 transition-colors"><i class="fas fa-th-large w-4 text-center mr-1.5"></i>Tableau de Bord</a></li>
+                    <li><a href="/materiels/" class="hover:text-brand-700 transition-colors"><i class="fas fa-satellite-dish w-4 text-center mr-1.5"></i>Matériels</a></li>
+                    <li><a href="/magasins/" class="hover:text-brand-700 transition-colors"><i class="fas fa-warehouse w-4 text-center mr-1.5"></i>Magasins</a></li>
+                    <li><a href="/documents/" class="hover:text-brand-700 transition-colors"><i class="fas fa-file-alt w-4 text-center mr-1.5"></i>Documents</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Info -->
+            <div>
+                <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Contact</h4>
+                <ul class="space-y-2 text-xs text-gray-400">
+                    <li class="flex items-center gap-2"><i class="fas fa-map-marker-alt w-4 text-center text-brand-600"></i>Rabat, Maroc</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-envelope w-4 text-center text-brand-600"></i>trans-gest@far.ma</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-phone w-4 text-center text-brand-600"></i>+212 5 37 XX XX XX</li>
+                </ul>
+            </div>
+
+            <!-- System Info -->
+            <div>
+                <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Système</h4>
+                <ul class="space-y-2 text-xs text-gray-400">
+                    <li class="flex items-center gap-2">
+                        <span class="flex items-center gap-1.5 px-2 py-0.5 bg-green-50 text-green-600 rounded font-medium"><i class="fas fa-circle text-[6px] animate-pulse"></i>En ligne</span>
+                    </li>
+                    <li class="flex items-center gap-2"><i class="fas fa-code-branch w-4 text-center"></i>Version 2.0</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-shield-alt w-4 text-center text-brand-600"></i>Sécurisé SSL</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="mt-8 pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p class="text-xs text-gray-400">&copy; 2025 TRANS-GEST — Forces Armées Royales du Maroc. Tous droits réservés.</p>
+            <div class="flex items-center gap-4">
+                <span class="flex items-center gap-1.5 text-xs text-green-600 bg-green-50 px-3 py-1 rounded-lg font-medium">
+                    <i class="fas fa-shield-alt text-[10px]"></i> Système Sécurisé
+                </span>
+                <span class="text-xs text-gray-300">|</span>
+                <span class="flex items-center gap-1.5 text-xs text-gray-400">
+                    <i class="fas fa-lock text-[10px]"></i> Accès Restreint
+                </span>
+            </div>
+        </div>
+    </div>
+</footer>
+    </div>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        // Auto-dismiss messages after 5s
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('[id^="msg-"]').forEach(function (el) {
+                setTimeout(function () {
+                    el.style.transition = 'all 0.4s ease';
+                    el.style.opacity = '0';
+                    el.style.transform = 'translateY(-10px)';
+                    setTimeout(function () { el.remove(); }, 400);
+                }, 5000);
+            });
+        });
+    </script>
+    
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Progress ring animation
+        var total = 20;
+        var enService = 14; var percent = total > 0 ? Math.round((enService / total) * 100) : 0; var circle = document.getElementById('progressCircle'); var circumference = 2 * Math.PI * 70; var offset = circumference - (percent / 100) * circumference; setTimeout(function () { circle.style.strokeDashoffset = offset; var counter = document.getElementById('progressPercent'); var current = 0; var interval = setInterval(function () { if (current >= percent) { clearInterval(interval); return; } current++; counter.textContent = current + '%'; }, 20); }, 300); // Session Timer var seconds = 0; var timerEl = document.getElementById('sessionTimer'); setInterval(function () { seconds++; var h = String(Math.floor(seconds / 3600)).padStart(2, '0'); var m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0'); var s = String(seconds % 60).padStart(2, '0'); timerEl.textContent = h + ':' + m + ':' + s; }, 1000); // ===== Build chart data directly from Django template loops ===== var gridColor = 'rgba(0,0,0,0.03)'; var tickColor = '#6b7280'; var legendFont = { size: 12, family: 'Inter, sans-serif', weight: '500' }; var typeNames = { radio: 'Radio', telephonique: 'T\u00e9l\u00e9phonique', informatique: 'Informatique', vehicule: 'V\u00e9hicule', armement: 'Armement', optique: 'Optique', autre: 'Autre' }; var etatNames = { service: 'En Service', attente: 'En Attente', approvisionnement: 'Approvisionnement', hors_service: 'Hors Service' }; // Build types arrays from Django template loop var typeLabels = []; var typeCounts = [];  typeLabels.push(typeNames['radio'] || 'radio'); typeCounts.push(7);  typeLabels.push(typeNames['informatique'] || 'informatique'); typeCounts.push(4);  typeLabels.push(typeNames['autre'] || 'autre'); typeCounts.push(3);  typeLabels.push(typeNames['optique'] || 'optique'); typeCounts.push(3);  typeLabels.push(typeNames['telephonique'] || 'telephonique'); typeCounts.push(2);  typeLabels.push(typeNames['vehicule'] || 'vehicule'); typeCounts.push(1);  // Build etats arrays from Django template loop var etatLabels = []; var etatCounts = [];  etatLabels.push(etatNames['approvisionnement'] || 'approvisionnement'); etatCounts.push(2);  etatLabels.push(etatNames['attente'] || 'attente'); etatCounts.push(2);  etatLabels.push(etatNames['hors_service'] || 'hors_service'); etatCounts.push(2);  etatLabels.push(etatNames['service'] || 'service'); etatCounts.push(14);  // ===== Type Chart (Bar) ===== var typeCtx = document.getElementById('typeChart'); if (typeCtx && typeLabels.length > 0) { new Chart(typeCtx, { type: 'bar', data: { labels: typeLabels, datasets: [{ label: 'Quantit\u00e9', data: typeCounts, backgroundColor: function (ctx) { var chart = ctx.chart; var area = chart.chartArea; if (!area) return '#22c55e'; var g = chart.ctx.createLinearGradient(0, area.bottom, 0, area.top); g.addColorStop(0, '#bbf7d0'); g.addColorStop(1, '#166534'); return g; }, borderRadius: 8, borderSkipped: false, barPercentage: 0.6 }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1, color: tickColor, font: { size: 11 } }, grid: { color: gridColor, drawBorder: false } }, x: { ticks: { color: tickColor, font: { size: 11 } }, grid: { display: false } } } } }); } // ===== \u00c9tat Chart (Doughnut) ===== var etatColors = ['#22c55e', '#f59e0b', '#3b82f6', '#ef4444']; var etatCtx = document.getElementById('etatChart'); if (etatCtx && etatLabels.length > 0) { new Chart(etatCtx, { type: 'doughnut', data: { labels: etatLabels, datasets: [{ data: etatCounts, backgroundColor: etatColors, borderWidth: 0, hoverOffset: 6, spacing: 2 }] }, options: { responsive: true, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true, pointStyleWidth: 10, color: tickColor, font: legendFont } } } } }); } }); </script> 
+</body>
+
+</html>

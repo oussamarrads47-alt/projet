@@ -1,0 +1,50 @@
+[
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$720000$admin$salt$hash",
+            "last_login": null,
+            "is_superuser": true,
+            "username": "admin",
+            "first_name": "Administrateur",
+            "last_name": "TRANS-GEST",
+            "email": "admin@transgest.ma",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2024-01-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$720000$manager$salt$hash",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "manager",
+            "first_name": "Gestionnaire",
+            "last_name": "Matériels",
+            "email": "manager@transgest.ma",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2024-01-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 3,
+        "fields": {
+            "password": "pbkdf2_sha256$720000$viewer$salt$hash",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "viewer",
+            "first_name": "Visualiseur",
+            "last_name": "Rapports",
+            "email": "viewer@transgest.ma",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2024-01-01T00:00:00Z"
+        }
+    }
+]

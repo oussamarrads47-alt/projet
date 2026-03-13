@@ -1,0 +1,372 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription | Transport Asset Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50:'#eff6ff', 100:'#dbeafe', 400:'#60a5fa', 500:'#3b82f6', 600:'#2563eb', 700:'#1d4ed8', 800:'#1e40af', 900:'#1e3a8a' },
+                        logistics: { 400:'#34d399', 500:'#10b981', 600:'#059669', 700:'#047857' }
+                    },
+                    animation: {
+                        'slide-in': 'slideIn 0.7s ease-out',
+                        'fade-up': 'fadeUp 0.6s ease-out',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        slideIn: { from:{ opacity:'0', transform:'translateX(-30px)' }, to:{ opacity:'1', transform:'translateX(0)' } },
+                        fadeUp: { from:{ opacity:'0', transform:'translateY(20px)' }, to:{ opacity:'1', transform:'translateY(0)' } },
+                        float: { '0%,100%':{ transform:'translateY(0)' }, '50%':{ transform:'translateY(-12px)' } }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        .input-field {
+            width: 100%; padding: 0.75rem 1rem 0.75rem 2.75rem;
+            background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 0.75rem;
+            font-size: 0.875rem; color: #1e293b; transition: all 0.2s;
+            outline: none;
+        }
+        .input-field:focus { border-color: #3b82f6; background: #fff; box-shadow: 0 0 0 3px rgba(59,130,246,0.12); }
+        .input-field::placeholder { color: #94a3b8; }
+        .input-field.error { border-color: #ef4444; background: #fff5f5; }
+        .input-wrapper { position: relative; }
+        .input-icon { position: absolute; left: 0.875rem; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.875rem; pointer-events: none; transition: color 0.2s; }
+        .input-wrapper:focus-within .input-icon { color: #3b82f6; }
+        .select-field {
+            width: 100%; padding: 0.75rem 2.5rem 0.75rem 2.75rem;
+            background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 0.75rem;
+            font-size: 0.875rem; color: #1e293b; transition: all 0.2s; outline: none; appearance: none; cursor: pointer;
+        }
+        .select-field:focus { border-color: #3b82f6; background: #fff; box-shadow: 0 0 0 3px rgba(59,130,246,0.12); }
+        .select-wrapper { position: relative; }
+        .select-arrow { position: absolute; right: 0.875rem; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; font-size: 0.75rem; }
+        .btn-primary {
+            width: 100%; padding: 0.875rem 1.5rem;
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+            color: white; font-weight: 600; font-size: 0.9rem;
+            border: none; border-radius: 0.875rem; cursor: pointer;
+            transition: all 0.3s; letter-spacing: 0.02em;
+        }
+        .btn-primary:hover { background: linear-gradient(135deg, #1e40af, #1d4ed8); box-shadow: 0 8px 25px rgba(29,78,216,0.35); transform: translateY(-1px); }
+        .btn-primary:active { transform: translateY(0); }
+        .road-line { stroke-dasharray: 12 8; animation: dash 2s linear infinite; }
+        @keyframes dash { to { stroke-dashoffset: -40; } }
+        .truck-body { animation: truckMove 4s ease-in-out infinite; }
+        @keyframes truckMove { 0%,100%{ transform: translateX(0); } 50%{ transform: translateX(6px); } }
+        .wheel { animation: spin 1.5s linear infinite; transform-origin: center; }
+        @keyframes spin { from{ transform: rotate(0deg); } to{ transform: rotate(360deg); } }
+    </style>
+</head>
+
+<body class="min-h-screen bg-slate-100 flex items-center justify-center p-4 relative overflow-hidden">
+
+    <!-- Background decorative circles -->
+    <div class="absolute -top-32 -left-32 w-96 h-96 bg-brand-100 rounded-full opacity-50 blur-3xl animate-float"></div>
+    <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-logistics-400/20 rounded-full blur-3xl animate-float" style="animation-delay:-3s"></div>
+    <div class="absolute top-1/3 right-1/4 w-64 h-64 bg-brand-200/30 rounded-full blur-2xl animate-float" style="animation-delay:-1.5s"></div>
+
+    <!-- Main card -->
+    <div class="relative w-full max-w-5xl bg-white rounded-3xl shadow-2xl shadow-slate-200/80 overflow-hidden flex flex-col lg:flex-row min-h-[680px]">
+
+        <!-- ==================== LEFT: REGISTRATION FORM ==================== -->
+        <div class="flex-1 flex flex-col justify-center px-8 py-10 sm:px-12 lg:px-14 animate-slide-in">
+
+            <!-- Header -->
+            <div class="mb-8">
+                <div class="inline-flex items-center gap-2 bg-brand-50 text-brand-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
+                    <i class="fas fa-truck text-xs"></i> Transport Asset Manager
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">Creer un compte</h1>
+                <p class="text-sm text-slate-500 mt-2 leading-relaxed">Inscrivez-vous pour acceder au systeme de gestion du materiel de transport.</p>
+            </div>
+
+            <!-- Messages -->
+            {% if messages %}
+            {% for message in messages %}
+            <div class="mb-4 px-4 py-3 rounded-xl text-sm font-medium {% if message.tags == 'error' %}bg-red-50 text-red-700 border border-red-200{% else %}bg-green-50 text-green-700 border border-green-200{% endif %}">
+                <i class="fas {% if message.tags == 'error' %}fa-exclamation-circle{% else %}fa-check-circle{% endif %} mr-2"></i>{{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            <!-- Form -->
+            <form method="POST" action="{% url 'register' %}" class="space-y-4" id="registerForm">
+                {% csrf_token %}
+
+                <!-- Row: Full Name + Email -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="id_full_name" class="block text-xs font-semibold text-slate-600 mb-1.5">
+                            <i class="fas fa-id-badge mr-1 text-brand-500"></i> Nom complet
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" name="full_name" id="id_full_name" class="input-field" placeholder="Jean Dupont" required autocomplete="name">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="id_email" class="block text-xs font-semibold text-slate-600 mb-1.5">
+                            <i class="fas fa-envelope mr-1 text-brand-500"></i> Email
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email" name="email" id="id_email" class="input-field" placeholder="jean@exemple.com" required autocomplete="email">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Username -->
+                <div>
+                    <label for="id_username" class="block text-xs font-semibold text-slate-600 mb-1.5">
+                        <i class="fas fa-at mr-1 text-brand-500"></i> Nom d'utilisateur
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-at input-icon"></i>
+                        <input type="text" name="username" id="id_username" class="input-field" placeholder="nomutilisateur" required autocomplete="username" autofocus>
+                    </div>
+                </div>
+
+                <!-- Row: Password + Confirm -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="id_password1" class="block text-xs font-semibold text-slate-600 mb-1.5">
+                            <i class="fas fa-lock mr-1 text-brand-500"></i> Mot de passe
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" name="password1" id="id_password1" class="input-field" placeholder="Au moins 8 caracteres" required autocomplete="new-password">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="id_password2" class="block text-xs font-semibold text-slate-600 mb-1.5">
+                            <i class="fas fa-lock mr-1 text-brand-500"></i> Confirmer mot de passe
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-shield-alt input-icon"></i>
+                            <input type="password" name="password2" id="id_password2" class="input-field" placeholder="Repetez le mot de passe" required autocomplete="new-password">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Role -->
+                <div>
+                    <label for="id_role" class="block text-xs font-semibold text-slate-600 mb-1.5">
+                        <i class="fas fa-user-tag mr-1 text-brand-500"></i> Role utilisateur
+                    </label>
+                    <div class="input-wrapper select-wrapper">
+                        <i class="fas fa-briefcase input-icon"></i>
+                        <select name="role" id="id_role" class="select-field" required>
+                            <option value="">-- Selectionner un role --</option>
+                            <option value="admin">Administrateur</option>
+                            <option value="fleet_manager">Gestionnaire de flotte</option>
+                            <option value="technician">Technicien maintenance</option>
+                            <option value="logistics">Responsable logistique</option>
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+
+                <!-- Terms checkbox -->
+                <div class="flex items-start gap-3 py-1">
+                    <div class="relative mt-0.5">
+                        <input type="checkbox" name="terms" id="id_terms" class="sr-only peer" required>
+                        <label for="id_terms" class="w-5 h-5 rounded-md border-2 border-slate-300 flex items-center justify-center cursor-pointer transition-all peer-checked:bg-brand-600 peer-checked:border-brand-600 bg-white hover:border-brand-400">
+                            <i class="fas fa-check text-white text-[9px] opacity-0 peer-checked:opacity-100 transition-opacity"></i>
+                        </label>
+                    </div>
+                    <label for="id_terms" class="text-xs text-slate-500 leading-relaxed cursor-pointer">
+                        J'accepte les <a href="#" class="text-brand-600 font-semibold hover:underline">conditions d'utilisation</a> et la <a href="#" class="text-brand-600 font-semibold hover:underline">politique de confidentialite</a>
+                    </label>
+                </div>
+
+                <!-- Submit button -->
+                <button type="submit" class="btn-primary mt-1" id="submitBtn">
+                    <i class="fas fa-user-plus mr-2"></i> Creer un compte
+                </button>
+
+                <!-- Login link -->
+                <p class="text-center text-sm text-slate-500 pt-1">
+                    Vous avez deja un compte ?
+                    <a href="{% url 'login' %}" class="text-brand-600 font-semibold hover:text-brand-700 transition-colors">Se connecter</a>
+                </p>
+            </form>
+        </div>
+
+        <!-- ==================== RIGHT: BRANDING & ILLUSTRATION ==================== -->
+        <div class="lg:w-[480px] bg-gradient-to-br from-brand-800 via-brand-700 to-brand-900 flex flex-col relative overflow-hidden animate-fade-up order-first lg:order-last">
+
+            <!-- Background blobs -->
+            <div class="absolute top-0 right-0 w-72 h-72 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 bg-logistics-500/20 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+
+            <div class="relative z-10 flex flex-col h-full px-10 py-10">
+
+                <!-- Logo + App name -->
+                <div class="flex items-center gap-3 mb-auto">
+                    <div class="w-11 h-11 bg-white/15 backdrop-blur rounded-2xl flex items-center justify-center border border-white/20">
+                        <svg viewBox="0 0 32 32" fill="none" class="w-6 h-6">
+                            <rect x="2" y="10" width="22" height="13" rx="2" fill="white" opacity="0.9"/>
+                            <rect x="24" y="14" width="6" height="9" rx="1.5" fill="white" opacity="0.7"/>
+                            <rect x="25" y="11" width="5" height="4" rx="1" fill="white" opacity="0.5"/>
+                            <circle cx="8" cy="24" r="3" fill="#1e40af" stroke="white" stroke-width="1.5"/>
+                            <circle cx="20" cy="24" r="3" fill="#1e40af" stroke="white" stroke-width="1.5"/>
+                            <rect x="6" y="13" width="12" height="7" rx="1" fill="#bfdbfe" opacity="0.6"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-white font-bold text-base leading-none">Transport Asset</p>
+                        <p class="text-brand-300 text-xs font-medium leading-none mt-0.5">Manager</p>
+                    </div>
+                </div>
+
+                <!-- Central illustration -->
+                <div class="flex-1 flex items-center justify-center py-6">
+                    <svg viewBox="0 0 320 280" class="w-full max-w-xs drop-shadow-2xl" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Road -->
+                        <rect x="10" y="220" width="300" height="40" rx="6" fill="#1e3a8a" opacity="0.7"/>
+                        <line x1="10" y1="240" x2="310" y2="240" stroke="white" stroke-width="2" stroke-dasharray="18 10" class="road-line"/>
+                        <!-- Road markings -->
+                        <rect x="10" y="220" width="300" height="4" rx="2" fill="white" opacity="0.1"/>
+
+                        <!-- Truck body -->
+                        <g class="truck-body">
+                            <!-- Trailer -->
+                            <rect x="30" y="165" width="160" height="58" rx="4" fill="#1d4ed8" opacity="0.9"/>
+                            <rect x="30" y="165" width="160" height="8" rx="2" fill="#2563eb" opacity="0.6"/>
+                            <rect x="32" y="175" width="156" height="2" fill="white" opacity="0.15"/>
+                            <!-- Trailer doors detail -->
+                            <rect x="140" y="170" width="2" height="50" fill="white" opacity="0.2"/>
+                            <rect x="100" y="170" width="1" height="50" fill="white" opacity="0.1"/>
+                            <!-- Cabin -->
+                            <rect x="190" y="175" width="88" height="48" rx="4" fill="#2563eb"/>
+                            <rect x="194" y="178" width="38" height="28" rx="3" fill="#60a5fa" opacity="0.5"/>
+                            <rect x="214" y="178" width="60" height="28" rx="3" fill="#1d4ed8" opacity="0.8"/>
+                            <!-- Window -->
+                            <rect x="196" y="180" width="34" height="22" rx="2" fill="#bfdbfe" opacity="0.7"/>
+                            <rect x="216" y="180" width="56" height="22" rx="2" fill="#93c5fd" opacity="0.3"/>
+                            <!-- Exhaust -->
+                            <rect x="272" y="155" width="6" height="22" rx="3" fill="#374151"/>
+                            <ellipse cx="275" cy="153" rx="6" ry="3" fill="#6b7280" opacity="0.6"/>
+                            <ellipse cx="275" cy="145" rx="4" ry="2" fill="#9ca3af" opacity="0.3"/>
+                            <!-- Grill -->
+                            <rect x="274" y="190" width="10" height="18" rx="2" fill="#1e3a8a"/>
+                            <rect x="275" y="193" width="8" height="1.5" rx="1" fill="white" opacity="0.3"/>
+                            <rect x="275" y="197" width="8" height="1.5" rx="1" fill="white" opacity="0.3"/>
+                            <rect x="275" y="201" width="8" height="1.5" rx="1" fill="white" opacity="0.3"/>
+                            <!-- Headlight -->
+                            <rect x="277" y="187" width="7" height="5" rx="1" fill="#fef08a" opacity="0.9"/>
+                            <!-- Wheels -->
+                            <g transform="translate(65,220)"><circle r="12" fill="#1f2937" stroke="#374151" stroke-width="2"/><circle r="6" fill="#374151"/><circle r="2" fill="#6b7280"/></g>
+                            <g transform="translate(105,220)"><circle r="12" fill="#1f2937" stroke="#374151" stroke-width="2"/><circle r="6" fill="#374151"/><circle r="2" fill="#6b7280"/></g>
+                            <g transform="translate(215,220)"><circle r="13" fill="#1f2937" stroke="#374151" stroke-width="2.5"/><circle r="7" fill="#374151"/><circle r="2.5" fill="#6b7280"/></g>
+                            <g transform="translate(258,220)"><circle r="13" fill="#1f2937" stroke="#374151" stroke-width="2.5"/><circle r="7" fill="#374151"/><circle r="2.5" fill="#6b7280"/></g>
+                        </g>
+
+                        <!-- Dashboard card floating -->
+                        <rect x="20" y="30" width="130" height="80" rx="10" fill="white" opacity="0.12" stroke="white" stroke-width="0.5" stroke-opacity="0.2"/>
+                        <rect x="28" y="40" width="50" height="6" rx="3" fill="white" opacity="0.6"/>
+                        <rect x="28" y="52" width="35" height="4" rx="2" fill="#93c5fd" opacity="0.7"/>
+                        <rect x="28" y="62" width="110" height="3" rx="1.5" fill="white" opacity="0.2"/>
+                        <rect x="28" y="62" width="78" height="3" rx="1.5" fill="#34d399" opacity="0.7"/>
+                        <rect x="28" y="72" width="110" height="3" rx="1.5" fill="white" opacity="0.2"/>
+                        <rect x="28" y="72" width="50" height="3" rx="1.5" fill="#60a5fa" opacity="0.7"/>
+                        <rect x="28" y="82" width="110" height="3" rx="1.5" fill="white" opacity="0.2"/>
+                        <rect x="28" y="82" width="90" height="3" rx="1.5" fill="#f59e0b" opacity="0.7"/>
+                        <!-- Chart mini bars -->
+                        <rect x="100" y="55" width="8" height="28" rx="2" fill="#34d399" opacity="0.6"/>
+                        <rect x="112" y="65" width="8" height="18" rx="2" fill="#60a5fa" opacity="0.6"/>
+                        <rect x="124" y="60" width="8" height="23" rx="2" fill="#f59e0b" opacity="0.6"/>
+
+                        <!-- Stats pills floating -->
+                        <rect x="170" y="20" width="130" height="38" rx="10" fill="white" opacity="0.1" stroke="white" stroke-width="0.5" stroke-opacity="0.2"/>
+                        <circle cx="185" cy="39" r="8" fill="#34d399" opacity="0.8"/>
+                        <text x="183" y="43" font-size="10" fill="white" font-weight="bold">V</text>
+                        <rect x="198" y="30" width="40" height="5" rx="2.5" fill="white" opacity="0.6"/>
+                        <rect x="198" y="40" width="26" height="4" rx="2" fill="#34d399" opacity="0.7"/>
+
+                        <rect x="170" y="68" width="130" height="38" rx="10" fill="white" opacity="0.1" stroke="white" stroke-width="0.5" stroke-opacity="0.2"/>
+                        <circle cx="185" cy="87" r="8" fill="#f59e0b" opacity="0.8"/>
+                        <text x="182" y="91" font-size="9" fill="white" font-weight="bold">M</text>
+                        <rect x="198" y="78" width="40" height="5" rx="2.5" fill="white" opacity="0.6"/>
+                        <rect x="198" y="88" width="60" height="4" rx="2" fill="#f59e0b" opacity="0.7"/>
+
+                        <rect x="170" y="116" width="130" height="38" rx="10" fill="white" opacity="0.1" stroke="white" stroke-width="0.5" stroke-opacity="0.2"/>
+                        <circle cx="185" cy="135" r="8" fill="#60a5fa" opacity="0.8"/>
+                        <text x="183" y="139" font-size="9" fill="white" font-weight="bold">L</text>
+                        <rect x="198" y="126" width="40" height="5" rx="2.5" fill="white" opacity="0.6"/>
+                        <rect x="198" y="136" width="80" height="4" rx="2" fill="#60a5fa" opacity="0.7"/>
+                    </svg>
+                </div>
+
+                <!-- Text branding -->
+                <div class="mt-auto">
+                    <h2 class="text-white text-xl font-bold leading-snug mb-3">
+                        Plateforme de gestion<br>du materiel de transport
+                    </h2>
+                    <p class="text-brand-300 text-sm leading-relaxed mb-6">
+                        Centralisez la gestion de vos vehicules, equipements et operations de maintenance dans une seule plateforme securisee et efficace.
+                    </p>
+
+                    <!-- Feature badges -->
+                    <div class="flex flex-wrap gap-2">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 rounded-full text-xs text-white/80 border border-white/10">
+                            <i class="fas fa-truck text-logistics-400 text-xs"></i> Flotte vehicules
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 rounded-full text-xs text-white/80 border border-white/10">
+                            <i class="fas fa-tools text-yellow-400 text-xs"></i> Maintenance
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 rounded-full text-xs text-white/80 border border-white/10">
+                            <i class="fas fa-chart-bar text-blue-300 text-xs"></i> Statistiques
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 rounded-full text-xs text-white/80 border border-white/10">
+                            <i class="fas fa-shield-alt text-green-300 text-xs"></i> Securise
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Live password match validation
+        const p1 = document.getElementById('id_password1');
+        const p2 = document.getElementById('id_password2');
+        function validatePasswords() {
+            if (p2.value && p1.value !== p2.value) {
+                p2.classList.add('error');
+            } else {
+                p2.classList.remove('error');
+            }
+        }
+        p1.addEventListener('input', validatePasswords);
+        p2.addEventListener('input', validatePasswords);
+
+        // Custom checkbox interaction
+        document.getElementById('id_terms').addEventListener('change', function() {
+            const icon = this.parentElement.querySelector('label i');
+            icon.style.opacity = this.checked ? '1' : '0';
+        });
+
+        // Submit loading state
+        document.getElementById('registerForm').addEventListener('submit', function() {
+            const btn = document.getElementById('submitBtn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Creation en cours...';
+            btn.disabled = true;
+            btn.style.opacity = '0.8';
+        });
+    </script>
+</body>
+</html>
