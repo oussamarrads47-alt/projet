@@ -1,18 +1,14 @@
-# 🎖️ TRANS-GEST
 
-## Système de Gestion des Matériels de Transmission
+
+## Système de Gestion des Matériels 
 
 ---
 
 ## 🇫🇷 Description
 
-**TRANS-GEST** est une application web professionnelle développée avec Django pour la gestion des équipements de communication militaire. Elle permet le suivi complet des matériels de transmission, des magasins, des détenteurs, des documents et des mouvements.
+**TRANS-GEST** est une application web professionnelle développée avec Django pour la gestion des équipements de communication. Elle permet le suivi complet des matériels , des magasins, des détenteurs, des documents et des mouvements.
 
-## 🇬🇧 Description (English)
 
-**TRANS-GEST** is a professional web application built with Django for managing military transmission equipment. It provides complete tracking of communication equipment, warehouses, holders, documents, and movements.
-
----
 
 ## ✨ Fonctionnalités
 
